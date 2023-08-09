@@ -1,2 +1,2 @@
 # DSC
-Repositório para a disciplina Desenvolvimento de Sistemas Comerciais
+Repositório para as atividades da matéria Laboratório de Programação de Sistemas
