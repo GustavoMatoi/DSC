@@ -34,6 +34,9 @@ export default StyleSheet.create({
     texto12px: {
         fontSize: 12
     },
+    texto15px: {
+        fontSize: 15
+    },
     roboto: {
         fontFamily: 'Roboto'
     },
