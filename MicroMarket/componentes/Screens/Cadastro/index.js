@@ -3,7 +3,7 @@ import { TextInput, StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert 
 import Estilo from "../../Estilo"
 import BotaoPrimario from "../../Inputs/BotaoPrimario"
 import { Cliente } from "../../../classes/Cliente"
-import { recuperarDocumentos } from "../../../bd/CRUD"
+import { criarDocumento, recuperarDocumentos, excluirDocumento } from "../../../bd/CRUD"
 export default props => {
     const novoCliente = new Cliente('', '', '', '', '', '', '', '', '')
     const [nome, setNome] = useState('')
@@ -73,11 +73,35 @@ export default props => {
             novoCliente.setNumero(numero)
             novoCliente.setEmail(email)
             novoCliente.setSenha(senha)
+            const novoClienteObj = {
+                nome: nome,
+                cpf: cpf, 
+                endereco: {
+                    estado: estado, 
+                    cidade: cidade, 
+                    bairro: bairro,
+                    rua: rua, 
+                    numero: numero,
+                },
+                email: email, 
+                senha: senha,
+            }
+            
+            const retorno = criarDocumento(novoClienteObj, 'Clientes', email)
+            console.log(retorno)
+            if (retorno) {
+                Alert.alert("Usuário cadastrado com sucesso!")
+
+            } else {
+                Alert.alert("Ocorreu um erro durante o cadastro.")
+            }
         }
     }
 
     useEffect(() => {
-        recuperarDocumentos('Clientes', 'emailDoCliente@email.com', 'Compras')
+        //recuperarDocumentos('Clientes', 'emailDoCliente@email.com', 'Carrinho')
+        //criarDocumento({teste: 'x', parametro2: 'y'}, 'Clientes', 'teste')
+        //excluirDocumento('Clientes', 'teste')
     }, [])    
     return (
         <ScrollView style={[style.container, Estilo.corPrimariaBackground ]}>
