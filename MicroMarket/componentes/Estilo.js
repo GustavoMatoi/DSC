@@ -8,7 +8,7 @@ export default StyleSheet.create({
         backgroundColor: '#B8BFFF'
     },
     corLight: {
-        backgroundColor: '#B8BFFF'
+        backgroundColor: '#DEE1FF'
     },
     textoCorPrimaria: {
         color: '#0F0765'

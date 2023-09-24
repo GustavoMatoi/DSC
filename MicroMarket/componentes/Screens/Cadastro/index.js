@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { TextInput, StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert } from "react-native"
+import { TextInput, StyleSheet, Text, TouchableOpacity,Image ,View, ScrollView, Alert } from "react-native"
 import Estilo from "../../Estilo"
 import BotaoPrimario from "../../Inputs/BotaoPrimario"
 import { Cliente } from "../../../classes/Cliente"
@@ -7,6 +7,8 @@ import { criarDocumento, recuperarDocumentos, excluirDocumento } from "../../../
 export default props => {
     const novoCliente = new Cliente('', '', '', '', '', '', '', '', '')
     const [nome, setNome] = useState('')
+    const [nomeInvalido, setNomeInvalido] = useState(false)
+
     const [cpf, setCpf] = useState('')
     const [estado, setEstado] = useState('')
     const [cidade, setCidade] = useState('')
@@ -15,7 +17,6 @@ export default props => {
     const [numero, setNumero] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-    const [nomeInvalido, setNomeInvalido] = useState(false)
     const [cpfInvalido, setCpfInvalido] = useState(false)
     const [estadoInvalido, setEstadoInvalido] = useState(false)
     const [cidadeInvalido, setCidadeInvalido] = useState(false)
@@ -110,7 +111,9 @@ export default props => {
                 <View style={[style.areaInputs]}>
                     <Text style={[Estilo.textoCorSecundaria, Estilo.texto15px, style.titulos]}>NOME:</Text>
                     <TextInput
-                        style={[style.textInput, nomeInvalido? {borderWidth: 1, borderColor: '#E70F0F'} :{borderWidth: 1, borderColor: '#C0FFBB'} ]}
+                        style=
+                        {[style.textInput, nomeInvalido? {borderWidth: 1, borderColor: '#E70F0F'} 
+                        :{borderWidth: 1, borderColor: '#C0FFBB'} ]}
                         placeholder="Informe seu nome"
                         placeholderTextColor={'#C3C3C3'}
                         value={nome}
