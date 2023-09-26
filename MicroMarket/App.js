@@ -7,10 +7,10 @@ import BotaoPrimario from './componentes/Inputs/BotaoPrimario';
 import Login from './componentes/Screens/Login/Login';
 import Cadastro from './componentes/Screens/Cadastro';
 import Produtos from './componentes/Screens/Main';
+import Chat from './componentes/Screens/Chat';
 export default function App() {
   return (
-      //<Login></Login>
-      <Produtos/>
+      <Chat/>
   )
 }
 
