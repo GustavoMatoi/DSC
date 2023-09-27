@@ -9,9 +9,11 @@ import Cadastro from './componentes/Screens/Cadastro';
 import Produtos from './componentes/Screens/Main';
 import Chat from './componentes/Screens/Chat';
 import PerfilVendedor from './componentes/Screens/PerfilVendedor';
+import PerfilCliente from './componentes/Screens/PerfilCliente';
+import Carrinho from './componentes/Screens/Carrinho';
 export default function App() {
   return (
-    <PerfilVendedor/>
+    <Carrinho/>
     )
 }
 
