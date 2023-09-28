@@ -11,9 +11,10 @@ import Chat from './componentes/Screens/Chat';
 import PerfilVendedor from './componentes/Screens/PerfilVendedor';
 import PerfilCliente from './componentes/Screens/PerfilCliente';
 import Carrinho from './componentes/Screens/Carrinho';
+import FinalizarCompra from './componentes/Screens/FinalizarCompra';
 export default function App() {
   return (
-    <Carrinho/>
+    <FinalizarCompra/>
     )
 }
 
