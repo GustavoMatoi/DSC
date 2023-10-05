@@ -20,15 +20,14 @@ const recuperarDocumentos = async (...params) => {
         const parametroRef = collection(db, parametros);
         const querySnapshot = await getDocs(parametroRef)  
 
-        console.log('querySnapshot', querySnapshot)
         querySnapshot.forEach((paramDoc) => {
             const dados = paramDoc.data()
             documentos.push(dados)
+            console.log(dados)
           })
     } catch (error) {
         console.log("Não foi possível recuperar os documentos.", error)
     }
-    console.log(documentos)
     return documentos
 }
 

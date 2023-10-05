@@ -6,7 +6,7 @@ import AreaProdutos from "./AreaProdutos";
 import AreaDashboards from "./AreaDashboards";
 import AreaVendas from "./AreaVendas";
 
-export default props => {
+export default ({navigation}) => {
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -18,7 +18,7 @@ export default props => {
         <View style={[style.container, Estilo.corPrimariaBackground]}>
             <AreaEsquerda></AreaEsquerda>
             <View style={{flexDirection: 'column', width: '80%'}}>
-                <AreaProdutos/>
+                <AreaProdutos navigation={navigation}/>
             <View style={[{flexDirection: 'row', width: '100%', height: '57%'}]}>
             <AreaDashboards/>
                 <AreaVendas/>

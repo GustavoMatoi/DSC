@@ -7,13 +7,15 @@ import {firebase, firebaseBD, app} from '../../../api/config'
 import { collection,setDoc,doc, getDocs, getDoc,getFirestore, where , query , addDoc, updateDoc} from "firebase/firestore";
 import {criarDocumento} from '../../../api/crud'
 import { Button } from "react-native-web";
-export default ({navigation}) => {
+export default ({navigation, route}) => {
+    console.log(route)
+    const {nome, descricao, estoque, valor, tags, imagem, preco} = route.params
     const [image, setImage] = useState('')
-    const [nomeProduto, setNomeProduto] = useState('')
-    const [descricaoProduto, setDescricaoProduto] = useState('')
-    const [estoque, setEstoque] = useState('')
-    const [precoIndividual, setPrecoIndividual] = useState('')
-    const [tags, setTags] = useState('')
+    const [nomeProduto, setNomeProduto] = useState(nome)
+    const [descricaoProduto, setDescricaoProduto] = useState(descricao)
+    const [estoqueEditando, setEstoqueEditando] = useState(estoque)
+    const [precoIndividual, setPrecoIndividual] = useState(preco)
+    const [tagsEditando, setTagsEditando] = useState(tags)
     
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
@@ -34,7 +36,7 @@ export default ({navigation}) => {
       };
 
       const cadastrarProduto = async () => {
-        const tagsAux = tags.split(',')
+        const tagsAux = tagsEditando.split(',')
         const produto = {
             nome: nomeProduto,
             descricao: descricaoProduto,
@@ -46,8 +48,9 @@ export default ({navigation}) => {
         try {
             criarDocumento(produto, 'Microempreendedores', 'teste', 'Produtos', nomeProduto)
         } catch (e){
-            console.log("Não foi possível cadastrar o produto. Erro: ", e)
+            console.log("Não foi possível cadastrar o produto. Ero: ", e)
         }
+        console.log(image)
     }
       
     const style = StyleSheet.create({
@@ -113,8 +116,8 @@ export default ({navigation}) => {
                         placeholder="Informe o estoque do pruduto"
                         style={[style.textInput, {marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
-                        value={estoque}
-                        onChangeText={(text) => setEstoque(text)}
+                        value={estoqueEditando}
+                        onChangeText={(text) => setEstoqueEditando(text)}
                     />
                     </View>
                     <View>
@@ -133,16 +136,16 @@ export default ({navigation}) => {
                         placeholder="Informe o nome do pruduto"
                         style={[style.textInput, ]}
                         placeholderTextColor='#e3e3e3'
-                        value={tags}
-                        onChangeText={(text) => setTags(text)}
+                        value={tagsEditando}
+                        onChangeText={(text) => setTagsEditando(text)}
                     />
                     </View>
                 </View>
                 <View style={[style.areaTextos, style.view2]}>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>IMAGEM DO PRODUTO (obrigatório)</Text>
-                        {image &&  
+                        {imagem &&  
                         <img id="imagemExibida" 
-                        src={image} alt="Imagem do produto"
+                        src={image? image : imagem} alt="Imagem do produto"
                         width={400}
                         height={400}
                         style={{backgroundColor: 'white'}}
@@ -166,16 +169,11 @@ export default ({navigation}) => {
                         />          
                         </View>
             </View>
-            <View style={{alignItems: 'center', width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View style={{alignItems: 'center', width: '100%'}}>
                 <TouchableOpacity
                 disabled={image === ''}
                 style={[image === '' ?  {backgroundColor: '#e3e3e3'} : Estilo.corSecundariaBackground, {width: 350, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 30}]} onPress={() => {cadastrarProduto(); navigation.goBack()}}>
                     <Text style={[Estilo.tituloPequeno, image === '' ? {color: 'white'}: Estilo.textoCorPrimaria]}>{image === '' ? 'SELECIONE UMA IMAGEM' : 'SALVAR PRODUTO'}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                d
-                style={[{backgroundColor: '#E70F0F', width: 350, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 30}]} onPress={() => {navigation.goBack()}}>
-                    <Text style={[Estilo.tituloPequeno,{color: 'white'}]}>CANCELAR</Text>
                 </TouchableOpacity>
             </View>
             <View>

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native'; // Removed import 
 import Estilo from "../../Estilo";
 import { TouchableOpacity } from "react-native-web";
 
-export default props => {
+export default ({navigation}) => {
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -40,7 +40,7 @@ export default props => {
                 )}
             </View>
             <View style={[{alignItems: 'flex-end', width: '98%'}]}>
-                <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]}>
+                <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Produtos')}>
                     <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>VISUALIZAR PRODUTOS</Text>
                 </TouchableOpacity>
             </View>
