@@ -2,19 +2,19 @@ import React from "react";
 import {Text, TextInput, StyleSheet} from 'react-native'
 import Estilo from "../Estilo";
 
-export default  ({onChangeSelect, placeholder}) => {
+export default  ({onChangeText, placeholder}) => {
 
     return(
         <TextInput
-            onChangeText={onChangeSelect}
+            onChangeText={onChangeText}
             placeholder={placeholder}
-            style={style.container}
+            style={style.containerInput}
         />
     )
 }
 
 const style = StyleSheet.create({
-    container: {
+    containerInput: {
         width: '90%',
         height: 50, 
         padding: 10, 

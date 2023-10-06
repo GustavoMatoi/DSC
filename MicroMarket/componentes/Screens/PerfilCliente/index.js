@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import Estilo from "../../Estilo";
 
-export default props => {
+export default ({navigation}) => {
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -79,7 +79,7 @@ export default props => {
                     <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]}>
                         <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria]}>MENSAGENS</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]}>
+                    <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={()=> navigation.navigate("Carrinho", {navigation: navigation})}>
                         <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria]}>CARRINHO</Text>
                     </TouchableOpacity>
                 </View>

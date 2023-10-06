@@ -28,7 +28,6 @@ const recuperarDocumentos = async (...params) => {
     } catch (error) {
         console.log("Não foi possível recuperar os documentos.", error)
     }
-    console.log(documentos)
     return documentos
 }
 

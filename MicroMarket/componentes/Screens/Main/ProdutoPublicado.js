@@ -4,7 +4,6 @@ import Estilo from '../../Estilo'
 import { AntDesign } from '@expo/vector-icons'; 
 
 export default ({nomeProduto, nomeVendedor, uriImagem, descricao, tags, preco, onPressCarrinho, onPressMensagens, onPressInformacoes}) => {
-
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -67,7 +66,7 @@ export default ({nomeProduto, nomeVendedor, uriImagem, descricao, tags, preco, o
                 </View>
                 <View style={[style.descricao]}>
                     <Text style={[Estilo.textoCorPrimaria, Estilo.texto12px]}>{descricao}</Text>
-                    {tags.map((i) => <Text style={[Estilo.texto12px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>{i}</Text>)}
+                    {tags ? tags.map((i) => <Text style={[Estilo.texto12px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>{i}</Text>) : null}
                     </View>
                 <View style={style.footer}>
                     <View style={[style.preco]}>

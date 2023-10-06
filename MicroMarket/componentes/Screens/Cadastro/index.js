@@ -4,7 +4,8 @@ import Estilo from "../../Estilo"
 import BotaoPrimario from "../../Inputs/BotaoPrimario"
 import { Cliente } from "../../../classes/Cliente"
 import { criarDocumento, recuperarDocumentos, excluirDocumento } from "../../../bd/CRUD"
-export default props => {
+import {firebase} from "../../../bd/config"
+export default ({navigation}) => {
     const novoCliente = new Cliente('', '', '', '', '', '', '', '', '')
     const [nome, setNome] = useState('')
     const [nomeInvalido, setNomeInvalido] = useState(false)
@@ -91,8 +92,9 @@ export default props => {
             const retorno = criarDocumento(novoClienteObj, 'Clientes', email)
             console.log(retorno)
             if (retorno) {
+                firebase.auth().createUserWithEmailAndPassword(email, senha)
                 Alert.alert("Usuário cadastrado com sucesso!")
-
+                navigation.navigate("Login")
             } else {
                 Alert.alert("Ocorreu um erro durante o cadastro.")
             }

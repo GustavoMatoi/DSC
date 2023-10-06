@@ -3,7 +3,7 @@ import {View, Image, TouchableOpacity, StyleSheet, Text } from 'react-native'
 import Estilo from '../../Estilo'
 import { Entypo } from '@expo/vector-icons'; 
 
-export default props => {
+export default ({nome, descricao, preco, imagem, onPress}) => {
     const style = StyleSheet.create({
         container: {
             width: '95%',
@@ -31,7 +31,7 @@ export default props => {
     return (
         <View style={[style.container, Estilo.corSecundariaBackground]}>
             <View style={[{width: '100%', alignItems: 'flex-end'}]}>
-                <TouchableOpacity style={[style.botao]}>
+                <TouchableOpacity style={[style.botao]} onPress={onPress}>
                     <Entypo name="trash" size={24} color="white" />
                 </TouchableOpacity>
             </View>
@@ -40,19 +40,19 @@ export default props => {
                     <Image 
                     width={80}
                     height={80}
-                    source={{uri: 'https://acdn.mitiendanube.com/stores/002/037/298/products/conjunto_feminino_cropped_short_estampado_roupa_feminina_2313_1_a4a6cacb9f9363239bc0e1fa78ccdc2a-239bc0e1fa78ccdc2a16492675488736-640-0.jpg'}}/>
+                    source={{uri: imagem}}/>
                     
                 </View>
     
                 <View style={[style.areaTexto]}>
                     <View>
-                        <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>Nome do produto</Text>
+                        <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>{nome}</Text>
                     </View>
                     <View>
-                        <Text style={[Estilo.texto12px, Estilo.textoCorPrimaria]}>Descrição Descrição Descrição Descrição</Text>
+                        <Text style={[Estilo.texto12px, Estilo.textoCorPrimaria]}>{descricao}</Text>
                     </View>
                     <View style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
-                        <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>R$ Preço</Text>
+                        <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>R$ {preco}</Text>
                     </View>
                 </View>
             </View>

@@ -3,8 +3,9 @@ import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native
 import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import RadioBotao from "./RadioBotao";
-export default props => {
-    const produtos = [1,2,3,4,5,6]
+export default ({navigation, route}) => {
+    const [selecionado, setSelecionado] = useState(0)
+    const {produtos, total} = route.params
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -16,7 +17,7 @@ export default props => {
             alignItems: 'center'
         }
     })
-
+    console.log('produtos', total)
     return (
         <ScrollView style={[style.container, Estilo.corSecundariaBackground]}>
             <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria, Estilo.centralizado]}>FINALIZAR COMPRA</Text>
@@ -26,8 +27,11 @@ export default props => {
                 </View>
                 {produtos.map((i) => 
                                     <View style={[{marginTop: '5%'}]}>
-                                    <ProdutoNoCarrinho/>
-                
+                                <ProdutoNoCarrinho
+                                nome={i.nome}
+                                imagem={i.imagem}
+                                descricao={i.descricao}
+                                />                
                                 </View>
                 )}
 
@@ -37,12 +41,19 @@ export default props => {
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, {marginLeft: '5%'}]}>PAGAMENTO </Text>
                 </View>
                 <View style={[{marginTop: '5%',  width:'95%'}]}>
-                    <RadioBotao options={['Cartão de Crédito', 'Pix', 'Boleto Bancário']} onChangeSelect={(item) => console.log(item)}/>
-
+                <RadioBotao
+                            options={['Cartão de Crédito', 'Boleto', 'Pix']}
+                            selected={selecionado}
+                            onChangeSelect={(opt, i) => { setSelecionado(i);}}
+                        />
                 </View>
                 <View style={[{marginTop: '5%', width:'95%'}]}>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, Estilo.centralizado]}>ENVIAR PARA</Text>
                     <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Endereço do usuário</Text>
+                </View>
+                <View style={[{marginTop: '5%', width:'95%'}]}>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, Estilo.centralizado]}>TOTAL</Text>
+                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>R${total}</Text>
                 </View>
             </View>
             <View style={[{marginVertical: '10%', alignItems: 'center'}]}>

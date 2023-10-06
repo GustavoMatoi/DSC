@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {Text, View, StyleSheet, Image} from 'react-native'
 import Estilo from "../../Estilo";
 
-export default props => {
+export default ({imagem, nome, preco}) => {
     const style = StyleSheet.create({
         container: {
             width: '95%',
@@ -27,15 +27,15 @@ export default props => {
     return (
         <View style={[style.container, Estilo.corLight]}>
             <Image
-            source={{uri: 'https://m.media-amazon.com/images/I/61HH9uitmTL._AC_UF894,1000_QL80_.jpg'}}
+            source={{uri: imagem}}
             style={[style.imagem]}
             />
             <View style={[style.areaTextos]}>
                 <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>
-                    Nome do produto
+                    {nome}
                 </Text>
                 <Text style={[Estilo.texto20px, Estilo.textoCorPrimaria]}>
-                    Preço
+                    {preco}
                 </Text>
             </View>
         </View>

@@ -1,9 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native'
 import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
+import { excluirDocumento, recuperarDocumentos } from "../../../bd/CRUD";
+import { deleteDoc, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
 
-export default props => {
+export default ({navigation}) => {
+    const [produtosNoCarrinho, setProdutosNoCarrinho] = useState([])
+    const [total, setTotal] = useState(0)
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -29,25 +33,62 @@ export default props => {
         }
     })
 
-    const produtos = [1,1,1,2,3,1,2,3,1,2]
+    const fetchData = useCallback(async () => {
+        try {
+            const data = await recuperarDocumentos('Clientes', 'guteixeira2001@gmail.com', 'Carrinho');
+            console.log('Data:', data);
+            setProdutosNoCarrinho(data);
+    
+            const soma = data.reduce((accumulator, currentItem) => {
+                const preco = currentItem.precoIndividual || 0; // Handle cases where precoIndividual is undefined
+                return accumulator + preco;
+            }, 0);
+    
+            setTotal(soma); 
+        } catch (error) {
+            console.error("Erro ao recuperar os dados:", error);
+        }
+    }, []);
+    
+
+    const excluirProduto = useCallback(async (produto) => {
+        console.log(produto.nome)
+        excluirDocumento('Clientes', 'guteixeira2001@gmail.com', 'Carrinho', produto.nome)
+        fetchData()
+    }, []);
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+    
+    
     return (
         <View  style={[style.container, Estilo.corPrimariaBackground]}>
             <View style={[style.titulo]}>
                 <Text style={[Estilo.tituloMedio, Estilo.textoCorSecundaria]}>CARRINHO</Text>
             </View>
             <FlatList
-            data={produtos}
-            renderItem={(item) =>  {return (
+            data={produtosNoCarrinho}
+            renderItem={({item}) =>  {return (
                 <View style={[{marginVertical: 20}]}>
-                    <ProdutoNoCarrinho/>
+
+                    <ProdutoNoCarrinho
+                    nome={item.nome}
+                    descricao={item.descricao}
+                    preco={item.precoIndividual}
+                    imagem={item.imagem}
+                    onPress={() => excluirProduto(item)}
+                    />
+
                 </View>
             ) }}
             />
+
+            
             <View style={[style.footer, Estilo.corSecundariaBackground]}>
                 <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>
-                    R$ Total
+                    R$ {total}
                 </Text>
-                <TouchableOpacity style={[style.botao, {backgroundColor:'#6DFB72' }]}>
+                <TouchableOpacity style={[style.botao, {backgroundColor:'#6DFB72' }]} onPress={()=> navigation.navigate("Finalizar compra", {produtos: produtosNoCarrinho, total: total})}>
                     <Text style={[Estilo.texto15px, {color: 'green', fontWeight: 'bold'}]}>FINALIZAR COMPRA</Text>
                 </TouchableOpacity>
             </View>

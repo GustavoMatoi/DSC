@@ -1,11 +1,23 @@
 import React, {useState, useEffect} from "react";
-import {View, StyleSheet, Dimensions, Text, TextInput} from 'react-native'
+import {View, StyleSheet, Dimensions, Text, TextInput, Alert} from 'react-native'
 import Estilo from "../../Estilo";
 import InputTexto from "../../Inputs/InputTexto";
 import Logo from "../../Logo";
 import BotaoPrimario from "../../Inputs/BotaoPrimario";
+import {firebase} from "../../../bd/config"
 
-export default props => {
+export default ({navigation}) => {
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
+    const handleLogin = (email, senha) => {
+        email = email.trim();
+        firebase.auth().signInWithEmailAndPassword(email, senha)
+            .then(() => navigation.navigate('Principal'))
+            .catch((e) => {
+                console.error("Error:", e);
+                Alert.alert("Erro ao realizar o login.", e.message);
+            }); 
+    }
 
     return (
         <View style={[style.container, Estilo.corPrimariaBackground]}>
@@ -21,20 +33,28 @@ export default props => {
             <View style={[style.inputs, Estilo.centralizado]}>
                 <View style={[{marginTop: '2%', width: '95%'}]}>
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {fontWeight: 'bold', marginBottom: 5}]}>Login:</Text>
-                    <InputTexto placeholder="Informe seu email" onChangeText={()=> {}}/>
-                </View>
+                    <TextInput
+                    onChangeText={(text)=> setEmail(text)}
+                    placeholder={'Informe seu email'}
+                    style={style.containerInput}
+                />
+                                </View>
                 <View style={[{marginTop: '2%', width: '95%'}]}>
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {fontWeight: 'bold', marginBottom: 5}]}>Senha:</Text>
-                    <InputTexto placeholder="Informe sua senha" onChangeText={()=> {}}/>
-                </View>
+                    <TextInput
+                        onChangeText={(text) => setSenha(text)}
+                        placeholder={'Informe sua senha'}
+                        style={style.containerInput}
+                    />
+                        </View>
             </View>
 
             <View style={[{marginTop: '10%', width: '50%', alignItems: 'center'}, Estilo.centralizado]}>
-                    <BotaoPrimario onPress={()=> {}} texto={"Entrar"}/>
+                    <BotaoPrimario onPress={()=> handleLogin(email, senha)} texto={"Entrar"}/>
             </View>
         
             <View style={[Estilo.centralizado, {marginTop: '10%'}]}>
-                <Text style={[Estilo.textoCorSecundaria, Estilo.texto12px, {textDecorationLine: 'underline'}]} onPress={()=> {}}>APERTE AQUI PARA SE CADASTRAR</Text>
+                <Text style={[Estilo.textoCorSecundaria, Estilo.texto12px, {textDecorationLine: 'underline'}]} onPress={()=> navigation.navigate("Cadastro")}>APERTE AQUI PARA SE CADASTRAR</Text>
             </View>
         </View>
     )
@@ -51,8 +71,16 @@ const style = StyleSheet.create({
         width: '90%'
     },
     inputs: {
-        marginTop: '50%',
+        marginTop: '20%',
         width: '95%',
         alignItems: 'center'
+    },
+    containerInput: {
+        width: '90%',
+        height: 50, 
+        padding: 10, 
+        fontSize: 15,
+        backgroundColor: 'white',
+        borderRadius: 10
     }
 })
