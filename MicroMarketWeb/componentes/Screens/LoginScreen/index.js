@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import Estilo from "../../Estilo";
 import Logo from "../../Logo";
+import { firebase } from "../../../api/config";
 
-export default props => {
+export default ({navigation}) => {
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -26,7 +29,7 @@ export default props => {
         },
         areaBotoes: {
             width: '100%',
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
             flexDirection: 'row',
             marginTop: 40,
             padidng: 10
@@ -45,6 +48,16 @@ export default props => {
         }
 
     })
+
+    const handleNavigation = () => {
+        try {
+            firebase.auth().signInWithEmailAndPassword(email, senha)
+            navigation.navigate('Home')
+        } catch(error){
+            alert("Não foi possível realizar login", error)
+        }
+    }
+
     return (
         <View style={[Estilo.corPrimariaBackground, style.container]}>
             <View style={[style.areaLogo]}>
@@ -62,21 +75,25 @@ export default props => {
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {marginVertical: 10}]}>Login:</Text>
                     <TextInput
                         style={[style.textInput]}
+                        value={email}
+                        onChangeText={(text)=> setEmail(text)}
                     />
                 </View>
                 <View style={{width: '40%'}}>
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {marginVertical: 10}]}>Senha:</Text>
                     <TextInput
                         style={[style.textInput]}
+                        value={senha}
+                        onChangeText={(text)=>setSenha(text)}
                     />
                 </View>
             </View>
 
             <View style={[style.areaEntrar]}>
-                <TouchableOpacity style={[Estilo.corSecundariaBackground, {width: 300, height: 60, justifyContent: 'center', alignItems: 'center', borderRadius: 10}]}>
+                <TouchableOpacity style={[Estilo.corSecundariaBackground, {width: 300, height: 60, justifyContent: 'center', alignItems: 'center', borderRadius: 10}]} onPress={() => handleNavigation()}>
                     <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria]}>ENTRAR</Text>
                 </TouchableOpacity>
-                <Text style={[style.textoCorSecundaria, {marginTop: 20}]}>CLIQUE AQUI PARA SE CADASTRAR</Text>
+                <Text onPress={() => navigation.navigate("Cadastro")} style={[Estilo.textoCorSecundaria, Estilo.texto20px, {marginTop: 20, fontWeight: 'bold'}]}>CLIQUE AQUI PARA SE CADASTRAR</Text>
             </View>
         </View>
     )

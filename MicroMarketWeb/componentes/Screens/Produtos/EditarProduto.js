@@ -1,12 +1,8 @@
 import React, {useState, useEffect} from "react";
 import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image, Touchable} from 'react-native'
 import Estilo from "../../Estilo";
-import ImagePicker from 'react-native-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
-import {firebase, firebaseBD, app} from '../../../api/config'
-import { collection,setDoc,doc, getDocs, getDoc,getFirestore, where , query , addDoc, updateDoc} from "firebase/firestore";
 import {criarDocumento} from '../../../api/crud'
-import { Button } from "react-native-web";
 export default ({navigation, route}) => {
     console.log(route)
     const {nome, descricao, estoque, valor, tags, imagem, preco} = route.params

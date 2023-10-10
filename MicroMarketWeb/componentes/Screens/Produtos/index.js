@@ -70,7 +70,7 @@ export default ({navigation}) => {
         <View style={[style.container, Estilo.corPrimariaBackground]}>
             {carregando ? <Text>Carregando</Text> :
                 <View style={style.container}>
-                    <AreaEsquerda />
+                    <AreaEsquerda navigation={navigation} />
                     <View style={style.areaProdutos}>
                     <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>
                     <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Cadastrar Produtos')}>

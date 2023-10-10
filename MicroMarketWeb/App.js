@@ -8,6 +8,7 @@ import Produtos from './componentes/Screens/Produtos';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import EditarProduto from './componentes/Screens/Produtos/EditarProduto';
+import Cadastro from './componentes/Screens/Cadastro';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -15,7 +16,9 @@ export default function App() {
     <NavigationContainer
     >
       <Stack.Navigator>
+        <Stack.Screen name ="Login" component={LoginScreen} options={{headerShown: false}}/>
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="Cadastro" component={Cadastro}/>
         <Stack.Screen name="Produtos" component={Produtos} options={{ headerShown: false }} />
         <Stack.Screen name="Cadastrar Produtos" component={CadProduto} options={{ headerShown: false }} />
         <Stack.Screen name="Editar" component={EditarProduto} options={{ headerShown: false }} />

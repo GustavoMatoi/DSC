@@ -16,7 +16,7 @@ export default ({navigation}) => {
     })
     return (
         <View style={[style.container, Estilo.corPrimariaBackground]}>
-            <AreaEsquerda></AreaEsquerda>
+            <AreaEsquerda navigation={navigation}></AreaEsquerda>
             <View style={{flexDirection: 'column', width: '80%'}}>
                 <AreaProdutos navigation={navigation}/>
             <View style={[{flexDirection: 'row', width: '100%', height: '57%'}]}>

@@ -1,16 +1,20 @@
 import React, {useState, useEffect} from "react";
 import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image, Touchable} from 'react-native'
 import Estilo from "../../Estilo";
+import {firebase} from '../../../api/config'
 import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
 import {criarDocumento} from '../../../api/crud'
 export default ({navigation}) => {
     const [image, setImage] = useState('')
-    const [nomeProduto, setNomeProduto] = useState('')
-    const [descricaoProduto, setDescricaoProduto] = useState('')
-    const [estoque, setEstoque] = useState('')
-    const [precoIndividual, setPrecoIndividual] = useState('')
-    const [tags, setTags] = useState('')
-    
+    const [nome, setNome] = useState('')
+    const [estado, setEstado] = useState('')
+    const [cidade, setCidade] = useState('')
+    const [bairro, setBairro] = useState('')
+    const [rua, setRua] = useState('')
+    const [numero, setNumero] = useState('')
+    const [cnpj, setCnpj] = useState('')
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -29,31 +33,40 @@ export default ({navigation}) => {
         }
       };
 
-      const cadastrarProduto = async () => {
-        const tagsAux = tags.split(',')
-        const produto = {
-            nome: nomeProduto,
-            descricao: descricaoProduto,
-            estoque: parseInt(estoque),
-            precoIndividual: parseFloat(precoIndividual),
-            tags: tagsAux, 
-            imagem: image
+      const cadastrarUsuario = async () => {
+        const usuario = {
+            nome,
+            endereco : {
+                estado: estado,
+                rua: rua, 
+                cidade: cidade, 
+                numero: numero,
+            },
+            cnpj,
+            imagem: image,
+            email,
+            senha
         }
         try {
-            criarDocumento(produto, 'Microempreendedores', 'teste', 'Produtos', nomeProduto)
+            if(criarDocumento(usuario, 'Microempreendedores', email)){
+                firebase.auth().createUserWithEmailAndPassword(email, senha)
+                alert("Usuário cadastrado com sucesso!")
+                navigation.navigate('Login')
+            }
+            
         } catch (e){
-            console.log("Não foi possível cadastrar o produto. Erro: ", e)
+            console.log("Não foi possível cadastrar o usuário. Erro: ", e)
         }
     }
       
     const style = StyleSheet.create({
         container: {
             width: '100%',
-            height: '100%'
+            height: '150%'
         },
         areaInputs: {
             width: '100%',
-            height: '75%',
+            height: '80%',
             flexDirection: 'row',
             },
         textInput: {
@@ -83,59 +96,99 @@ export default ({navigation}) => {
             <View style={[style.areaInputs]}>
                 <View style={[style.areaTextos, style.view1]}>
                     <View style={[style.espacamento]}>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>NOME DO PRODUTO (obrigatório)</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>NOME(obrigatório)</Text>
                     <TextInput
                         placeholder="Informe o nome do pruduto"
                         style={[style.textInput, {marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
-                        value={nomeProduto}
-                        onChangeText={(text) => setNomeProduto(text)}
+                        value={nome}
+                        onChangeText={(text) => setNome(text)}
 
                     />
                     </View>
                     <View>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>DESCRIÇÃO DO PRODUTO (obrigatório)</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>ESTADO (obrigatório)</Text>
                     <TextInput
                         placeholder="Informe a descrição do pruduto"
                         style={[style.textInput, {marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
-                        value={descricaoProduto}
-                        onChangeText={(text) => setDescricaoProduto(text)}
+                        value={estado}
+                        onChangeText={(text) => setEstado(text)}
                     />
                     </View>
                     <View>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>ESTOQUE (obrigatório)</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>CIDADE (obrigatório)</Text>
                     <TextInput
                         placeholder="Informe o estoque do pruduto"
                         style={[style.textInput, {marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
-                        value={estoque}
-                        onChangeText={(text) => setEstoque(text)}
+                        value={cidade}
+                        onChangeText={(text) => setCidade(text)}
                     />
                     </View>
                     <View>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>PREÇO INDIVIDUAL (obrigatório)</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>BAIRRO (obrigatório)</Text>
                     <TextInput
                         placeholder="Informe o nome do pruduto"
                         style={[style.textInput, ]}
                         placeholderTextColor='#e3e3e3'
-                        value={precoIndividual}
-                        onChangeText={(text) => setPrecoIndividual(text)}
+                        value={bairro}
+                        onChangeText={(text) => setBairro(text)}
                     />
                     </View>
                     <View>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>TAGs (separado por vírgula)</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>RUA (obrigatório)</Text>
                     <TextInput
                         placeholder="Informe o nome do pruduto"
                         style={[style.textInput, ]}
                         placeholderTextColor='#e3e3e3'
-                        value={tags}
-                        onChangeText={(text) => setTags(text)}
+                        value={rua}
+                        onChangeText={(text) => setRua(text)}
+                    />
+                    </View>
+                    <View>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>NÚMERO (obrigatório)</Text>
+                    <TextInput
+                        placeholder="Informe o nome do pruduto"
+                        style={[style.textInput, ]}
+                        placeholderTextColor='#e3e3e3'
+                        value={numero}
+                        onChangeText={(text) => setNumero(text)}
+                    />
+                    </View>
+                    <View>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>CNPJ (obrigatório)</Text>
+                    <TextInput
+                        placeholder="Informe o nome do pruduto"
+                        style={[style.textInput, ]}
+                        placeholderTextColor='#e3e3e3'
+                        value={cnpj}
+                        onChangeText={(text) => setCnpj(text)}
+                    />
+                    </View>
+                    <View>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>Email (obrigatório)</Text>
+                    <TextInput
+                        placeholder="Informe o nome do pruduto"
+                        style={[style.textInput, ]}
+                        placeholderTextColor='#e3e3e3'
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
+                    />
+                    </View>
+                    <View>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>Senha (obrigatório)</Text>
+                    <TextInput
+                        placeholder="Informe o nome do pruduto"
+                        style={[style.textInput, ]}
+                        placeholderTextColor='#e3e3e3'
+                        value={senha}
+                        onChangeText={(text) => setSenha(text)}
                     />
                     </View>
                 </View>
                 <View style={[style.areaTextos, style.view2]}>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>IMAGEM DO PRODUTO (obrigatório)</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>FOTO (obrigatório)</Text>
                         {image &&  
                         <img id="imagemExibida" 
                         src={image} alt="Imagem do produto"
@@ -151,8 +204,8 @@ export default ({navigation}) => {
                             padding: '10px',
                             borderRadius: '5px',
                             border: 'none',
-                            height: '40px', // Adjust the height as needed
-                            fontSize: '16px', // Adjust the font size as needed
+                            height: '40px', 
+                            fontSize: '16px',
                             maginTop: '10px'
                         }}
                         placeholder="Selecione a imagem do produto"
@@ -164,15 +217,10 @@ export default ({navigation}) => {
             </View>
             <View style={{alignItems: 'center', width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                 <TouchableOpacity
-                disabled={image === ''}
-                style={[image === '' ?  {backgroundColor: '#e3e3e3'} : Estilo.corSecundariaBackground, {width: 350, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 30}]} onPress={() => {cadastrarProduto(); navigation.goBack()}}>
-                    <Text style={[Estilo.tituloPequeno, image === '' ? {color: 'white'}: Estilo.textoCorPrimaria]}>{image === '' ? 'SELECIONE UMA IMAGEM' : 'SALVAR PRODUTO'}</Text>
+                style={[Estilo.corSecundariaBackground, {width: 350, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 30}]} onPress={() => {cadastrarUsuario()}}>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>FINALIZAR CADASTRO</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                d
-                style={[{backgroundColor: '#E70F0F', width: 350, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 30}]} onPress={() => {navigation.goBack()}}>
-                    <Text style={[Estilo.tituloPequeno,{color: 'white'}]}>CANCELAR</Text>
-                </TouchableOpacity>
+
             </View>
             <View>
 

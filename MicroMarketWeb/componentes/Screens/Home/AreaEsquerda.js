@@ -2,9 +2,10 @@ import React from "react";
 import {Text, View, TouchableOpacity, StyleSheet, Platform, Image} from 'react-native'
 import Estilo from "../../Estilo";
 import { AntDesign } from '@expo/vector-icons'; 
+import { getAuth, signOut } from "firebase/auth";
 
 
-export default props => {
+export default ({navigation}) => {
     const style = StyleSheet.create({
         container: {
             width: '20%',
@@ -16,6 +17,13 @@ export default props => {
             justifyContent: 'space-around'
         }
     })
+
+    const logout = () => {
+        const auth = getAuth()
+        signOut(auth).then(() => {alert("Usuário deslogado com sucesso")
+        navigation.navigate('Login')}
+        ).catch((error)=> {console.log(error.message)})
+    }
     
     return (
         <View style={[style.container, Estilo.corSecundariaBackground]}>
@@ -43,7 +51,7 @@ export default props => {
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>PERFIL</Text>
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>VENDAS</Text>
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>DASHBOARDS</Text>
-                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>SAIR</Text>
+                <Text onPress={() => logout()} style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>SAIR</Text>
             </View>
         </View>
     )
