@@ -1,8 +1,31 @@
 import React, {useState, useEffect} from "react";
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import Estilo from "../../Estilo";
+import {firebase} from '../../../bd/config'
+import { recuperarDocumentos } from "../../../bd/CRUD";
+import { doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
 
 export default ({navigation}) => {
+    const [user, setUser] = useState({})
+    const [imageUrl, setImageUrl] = useState('')
+    useEffect(() => {
+        const db = getFirestore()
+        const user = firebase.auth().currentUser
+        console.log('user', user)
+
+        const recuperarDados = async () => {
+            const userRef = doc(db, 'Clientes', user.email);
+            const userSnapshot = await getDoc(userRef);
+            const userData = userSnapshot.data();
+            setUser(userData)
+            console.log(userData)
+        }
+
+        recuperarDados()
+    }, [])
+
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -55,6 +78,9 @@ export default ({navigation}) => {
             alignItems: 'center'
         }
     })
+
+
+
     return (
         <View style={[style.container, Estilo.corPrimariaBackground]}>
             <View style={[style.header]}>
@@ -63,23 +89,19 @@ export default ({navigation}) => {
             <View style={[Estilo.corSecundariaBackground, style.body]}>
                 <View style={[style.areaImagem]}>
                     <Image
-                        source={{uri:'https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2021/06/01235029/5-1024x576.png' }}
+                        source={{uri: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }}
                         style={[style.imagem]}
                     />
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>Nome sobrenome sobrenome</Text>
+                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>{user.nome}</Text>
                 </View>
 
                 <View style={[style.areaInformacoes]}>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Emdereço</Text>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Email</Text>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Telefone</Text>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Profissao</Text>
+                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>{user.email}</Text>
+
                 </View>
                 <View style={[style.areaBotoes]}>
-                    <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]}>
-                        <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria]}>MENSAGENS</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={()=> navigation.navigate("Carrinho", {navigation: navigation})}>
+
+                    <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={()=> navigation.navigate("Carrinho", {navigation: navigation, email: user.email})}>
                         <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria]}>CARRINHO</Text>
                     </TouchableOpacity>
                 </View>

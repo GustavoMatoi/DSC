@@ -33,6 +33,7 @@ export default ({navigation}) => {
     const adicionarProdutoNoCarrinho = (produto) => {
         if(criarDocumento(produto, 'Clientes', email, 'Carrinho', produto.nome)){
             Alert.alert("Produto adicionado!", "Produto adicionado com sucesso no carrinho.")
+            console.log(produto)
         } else { 
             Alert.alert("Ocorreu um erro", "Ocorreu um erro ao adicionar o produto no carrinho. Tente novamente mais tarde.")
         }

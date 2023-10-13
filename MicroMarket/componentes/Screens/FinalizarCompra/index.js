@@ -3,9 +3,10 @@ import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native
 import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import RadioBotao from "./RadioBotao";
+import { criarDocumento } from "../../../bd/CRUD";
 export default ({navigation, route}) => {
     const [selecionado, setSelecionado] = useState(0)
-    const {produtos, total} = route.params
+    const {produtos, total, email} = route.params
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -18,6 +19,34 @@ export default ({navigation, route}) => {
         }
     })
     console.log('produtos', total)
+
+    const data = new Date()
+    const dia = data.getDate()
+    const mes = data.getMonth()+1
+    const ano = data.getFullYear()
+
+    console.log(produtos)
+
+    const finalizarCompras = async () => {
+        produtos.forEach((i, index) => {
+            let metodo = ''
+            selecionado === 0? metodo = 'Cartão de Crédito' : selecionado === 1? metodo = 'Boleto' : metodo = 'Pix'
+            const compra = {
+                produtos: produtos[index],
+                metodo
+            }
+            criarDocumento(compra, 'Clientes', email, 'Compras', `Compra ${ano}|${mes}|${dia}`)
+            const vendas = {
+                produto: produtos[index],
+                metodo
+
+            }
+            criarDocumento(vendas, 'Microempreendedores', i.nomeVendedor, 'Vendas', `Venda ${ano}|${mes}|${dia}`)
+        })
+        
+
+    }
+
     return (
         <ScrollView style={[style.container, Estilo.corSecundariaBackground]}>
             <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria, Estilo.centralizado]}>FINALIZAR COMPRA</Text>
@@ -57,7 +86,7 @@ export default ({navigation, route}) => {
                 </View>
             </View>
             <View style={[{marginVertical: '10%', alignItems: 'center'}]}>
-                <TouchableOpacity style={[{width: '80%', height: 50, backgroundColor: '#C0FFBB', justifyContent: 'center', alignItems: 'center', borderRadius: 20}]}>
+                <TouchableOpacity style={[{width: '80%', height: 50, backgroundColor: '#C0FFBB', justifyContent: 'center', alignItems: 'center', borderRadius: 20}]} onPress={()=> finalizarCompras()}>
                     <Text style={[Estilo.tituloPequeno, {color: '#024C00'}]}>Finalizar compra</Text>
                 </TouchableOpacity>
             </View>

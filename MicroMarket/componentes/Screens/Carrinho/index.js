@@ -5,7 +5,8 @@ import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import { excluirDocumento, recuperarDocumentos } from "../../../bd/CRUD";
 import { deleteDoc, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
 
-export default ({navigation}) => {
+export default ({navigation, route}) => {
+    const {email} = route.params
     const [produtosNoCarrinho, setProdutosNoCarrinho] = useState([])
     const [total, setTotal] = useState(0)
     const style = StyleSheet.create({
@@ -35,7 +36,7 @@ export default ({navigation}) => {
 
     const fetchData = useCallback(async () => {
         try {
-            const data = await recuperarDocumentos('Clientes', 'guteixeira2001@gmail.com', 'Carrinho');
+            const data = await recuperarDocumentos('Clientes', email, 'Carrinho');
             console.log('Data:', data);
             setProdutosNoCarrinho(data);
     
@@ -53,7 +54,7 @@ export default ({navigation}) => {
 
     const excluirProduto = useCallback(async (produto) => {
         console.log(produto.nome)
-        excluirDocumento('Clientes', 'guteixeira2001@gmail.com', 'Carrinho', produto.nome)
+        excluirDocumento('Clientes', email, 'Carrinho', produto.nome)
         fetchData()
     }, []);
     useEffect(() => {
@@ -88,7 +89,7 @@ export default ({navigation}) => {
                 <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>
                     R$ {total}
                 </Text>
-                <TouchableOpacity style={[style.botao, {backgroundColor:'#6DFB72' }]} onPress={()=> navigation.navigate("Finalizar compra", {produtos: produtosNoCarrinho, total: total})}>
+                <TouchableOpacity style={[style.botao, {backgroundColor:'#6DFB72' }]} onPress={()=> navigation.navigate("Finalizar compra", {produtos: produtosNoCarrinho, total: total, email})}>
                     <Text style={[Estilo.texto15px, {color: 'green', fontWeight: 'bold'}]}>FINALIZAR COMPRA</Text>
                 </TouchableOpacity>
             </View>
