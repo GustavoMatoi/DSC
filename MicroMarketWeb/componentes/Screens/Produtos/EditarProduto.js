@@ -5,7 +5,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage'
 import {criarDocumento} from '../../../api/crud'
 export default ({navigation, route}) => {
     console.log(route)
-    const {nome, descricao, estoque, valor, tags, imagem, preco} = route.params
+    const {user, nome, descricao, estoque, valor, tags, imagem, preco} = route.params
     const [image, setImage] = useState('')
     const [nomeProduto, setNomeProduto] = useState(nome)
     const [descricaoProduto, setDescricaoProduto] = useState(descricao)
@@ -42,7 +42,7 @@ export default ({navigation, route}) => {
             imagem: image
         }
         try {
-            criarDocumento(produto, 'Microempreendedores', 'teste', 'Produtos', nomeProduto)
+            criarDocumento(produto, 'Microempreendedores', user.email, 'Produtos', nomeProduto)
         } catch (e){
             console.log("Não foi possível cadastrar o produto. Ero: ", e)
         }
@@ -154,8 +154,8 @@ export default ({navigation, route}) => {
                             padding: '10px',
                             borderRadius: '5px',
                             border: 'none',
-                            height: '40px', // Adjust the height as needed
-                            fontSize: '16px', // Adjust the font size as needed
+                            height: '40px', 
+                            fontSize: '16px', 
                             maginTop: '10px'
                         }}
                         placeholder="Selecione a imagem do produto"

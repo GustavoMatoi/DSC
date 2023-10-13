@@ -3,9 +3,11 @@ import { TextInput, Text, StyleSheet, View, FlatList, SafeAreaView, Alert } from
 import ProdutoPublicado from './ProdutoPublicado'
 import BotaoPesquisa from './BotaoPesquisa'
 import Estilo from '../../Estilo'
-import { collection, getFirestore, getDocs, doc } from 'firebase/firestore'
+import { collection, getFirestore, getDocs, doc, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { criarDocumento, recuperarDocumentos } from '../../../bd/CRUD'
-export default props => {
+import { TouchableOpacity } from 'react-native-web'
+import {firebase} from '../../../bd/config'
+export default ({navigation}) => {
     const [listagem, setListagem] = useState([])
     const listagemProdutos = useCallback(async () => {
         const produtos = [];
@@ -29,12 +31,21 @@ export default props => {
     }, []);
     
     const adicionarProdutoNoCarrinho = (produto) => {
-        if(criarDocumento(produto, 'Clientes', 'guteixeira2001@gmail.com', 'Carrinho', produto.nome)){
+        if(criarDocumento(produto, 'Clientes', email, 'Carrinho', produto.nome)){
             Alert.alert("Produto adicionado!", "Produto adicionado com sucesso no carrinho.")
         } else { 
             Alert.alert("Ocorreu um erro", "Ocorreu um erro ao adicionar o produto no carrinho. Tente novamente mais tarde.")
         }
     }
+
+    const [mensagens, setMensagens] = useState([])
+    const [carregando, setCarregando] = useState(true)
+    const [email, setEmail] = useState('')
+    useEffect(() => {
+        const user = firebase.auth().currentUser
+        console.log('user', user)
+        setEmail(user.email)
+    }, [])
 
     useEffect(() => {
         listagemProdutos();
@@ -59,11 +70,12 @@ export default props => {
                 tags={item.tags}
                 preco={item.precoIndividual}
                 onPressCarrinho={()=>adicionarProdutoNoCarrinho(item)}
-                onPressMensagens={console.log(item.descricao)}
+                onPressMensagens={()=> navigation.navigate('Chat', {vendedor: item.nomeVendedor, email})}
                 onPressInformacoes={item.onPressInformacoes}
                 />
   )}
 />}
+                
         </SafeAreaView>
     )
 }

@@ -3,7 +3,7 @@ import {Text, View, Image, TouchableOpacity, StyleSheet} from 'react-native'
 import Estilo from '../../Estilo'
 import { recuperarDocumentos } from '../../../api/crud'
 
-export default ({imagem, nome, descricao, estoque, valor, tags=[], onPressExcluir, onPressEditar}) => {
+export default ({imagem, nome, descricao, estoque, valor, tags=[], onPressExcluir, onPressEditar, user}) => {
 
 
     const style = StyleSheet.create({

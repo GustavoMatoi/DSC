@@ -26,6 +26,7 @@ export default function App() {
         <Stack.Screen name="Principal" component={Routes} options={{ headerShown: false }} />
         <Stack.Screen name="Carrinho" component={Carrinho} options={{ headerShown: false }} />
         <Stack.Screen name="Finalizar compra" component={FinalizarCompra} />
+        <Stack.Screen name="Chat" component={Chat}/>
       </Stack.Navigator>
     </NavigationContainer>
 

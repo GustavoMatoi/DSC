@@ -6,7 +6,8 @@ import Produto from "./Produto";
 import { excluirDocumento, recuperarDocumentos } from "../../../api/crud";
 import { TouchableOpacity } from "react-native-web";
 
-export default ({navigation}) => {
+export default ({navigation, route}) => {
+    const {user} = route.params
     const [produtos, setProdutos] = useState([])
     const [rows, setRows] = useState([])
     const [carregando, setCarregando] = useState(true)
@@ -31,7 +32,7 @@ export default ({navigation}) => {
     const excluirDocumentos = (nome) => {
         const confirmacao = confirm("Deseja excluir mesmo? Não será possível recuperar os dados após a confirmação.");
         if (confirmacao) {
-            excluirDocumento('Microempreendedores', 'teste', 'Produtos', nome)
+            excluirDocumento('Microempreendedores', user.email, 'Produtos', nome)
         } else {
             alert("Exclusão cancelada.")
         }
@@ -39,11 +40,11 @@ export default ({navigation}) => {
     }
 
     const editarDocumento = (item) => {
-        navigation.navigate('Editar', {nome: item.nome, imagem: item.imagem, tags: item.tags, descricao: item.descricao, preco: item.precoIndividual, estoque: item.estoque})
+        navigation.navigate('Editar', {user: user, nome: item.nome, imagem: item.imagem, tags: item.tags, descricao: item.descricao, preco: item.precoIndividual, estoque: item.estoque})
     }
         const fetchData =  useCallback( async () => {
             try {
-                const produtosData = await recuperarDocumentos('Microempreendedores', 'teste', 'Produtos');
+                const produtosData = await recuperarDocumentos('Microempreendedores', user.email, 'Produtos');
                 setProdutos(produtosData);
 
                 const itemsPerRow = 5;
@@ -66,41 +67,61 @@ export default ({navigation}) => {
         fetchData()
     })
 
+/*
+        <View>
+            <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria]}>Não há produtos cadastrados.</Text>
+            <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Cadastrar Produtos')}>
+                   <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>CADASTRAR PRODUTO</Text>
+               </TouchableOpacity>
+            </View>
+*/
+
     return (
         <View style={[style.container, Estilo.corPrimariaBackground]}>
             {carregando ? <Text>Carregando</Text> :
                 <View style={style.container}>
-                    <AreaEsquerda navigation={navigation} />
-                    <View style={style.areaProdutos}>
-                    <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>
-                    <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Cadastrar Produtos')}>
-                        <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>CADASTRAR PRODUTO</Text>
-                    </TouchableOpacity>
-                    </View>
-                        {rows.map((row, index) => (
-                            <View key={index} style={style.row}>
-                                <FlatList
-                                    data={row}
-                                    horizontal={true}
-                                    renderItem={({ item }) => (
-                                        <View style={{ marginHorizontal: 15 }}>
-                                            <Produto 
-                                            nome={item.nome}
-                                            descricao={item.descricao}
-                                            tags={item.tags}
-                                            precoIndividual={item.precoIndividual}
-                                            imagem={item.imagem}
-                                            onPressExcluir={() => excluirDocumentos(item.nome)}
-                                            onPressEditar={() => editarDocumento(item)}
-                                            />
-                                            </View>
-                                        
-                                    )}
-                                />
+               <AreaEsquerda navigation={navigation} imagem={user.imagem} />
+               <View style={style.areaProdutos}>
+               <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>
+               <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Cadastrar Produtos', {user: user})}>
+                   <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>CADASTRAR PRODUTO</Text>
+               </TouchableOpacity>
+               </View>
+                    {produtos.length  === 0 ? 
+                            <View>
+                            <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria]}>Não há produtos cadastrados.</Text>
+                            <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Cadastrar Produtos', {user: user})}>
+                                   <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>CADASTRAR PRODUTO</Text>
+                               </TouchableOpacity>
                             </View>
-                        ))}
-                    </View>
-                </View>}
+                            :
+                            null
+                    }
+                   {rows.map((row, index) => (
+                       <View key={index} style={style.row}>
+                           <FlatList
+                               data={row}
+                               horizontal={true}
+                               renderItem={({ item }) => (
+                                   <View style={{ marginHorizontal: 15 }}>
+                                       <Produto 
+                                       user= {user}
+                                       nome={item.nome}
+                                       descricao={item.descricao}
+                                       tags={item.tags}
+                                       precoIndividual={item.precoIndividual}
+                                       imagem={item.imagem}
+                                       onPressExcluir={() => excluirDocumentos(item.nome)}
+                                       onPressEditar={() => editarDocumento(item)}
+                                       />
+                                       </View>
+                                   
+                               )}
+                           />
+                       </View>
+                   ))}
+               </View>
+           </View>}
         </View>
     );
 };

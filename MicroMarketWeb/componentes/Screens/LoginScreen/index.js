@@ -52,7 +52,7 @@ export default ({navigation}) => {
     const handleNavigation = () => {
         try {
             firebase.auth().signInWithEmailAndPassword(email, senha)
-            navigation.navigate('Home')
+            navigation.navigate('Home', {email})
         } catch(error){
             alert("Não foi possível realizar login", error)
         }
@@ -75,7 +75,6 @@ export default ({navigation}) => {
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {marginVertical: 10}]}>Login:</Text>
                     <TextInput
                         style={[style.textInput]}
-                        value={email}
                         onChangeText={(text)=> setEmail(text)}
                     />
                 </View>
@@ -83,7 +82,6 @@ export default ({navigation}) => {
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {marginVertical: 10}]}>Senha:</Text>
                     <TextInput
                         style={[style.textInput]}
-                        value={senha}
                         onChangeText={(text)=>setSenha(text)}
                     />
                 </View>

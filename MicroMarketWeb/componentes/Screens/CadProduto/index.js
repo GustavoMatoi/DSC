@@ -3,7 +3,8 @@ import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image, Touchable} f
 import Estilo from "../../Estilo";
 import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
 import {criarDocumento} from '../../../api/crud'
-export default ({navigation}) => {
+export default ({navigation, route}) => {
+    const {user} = route.params
     const [image, setImage] = useState('')
     const [nomeProduto, setNomeProduto] = useState('')
     const [descricaoProduto, setDescricaoProduto] = useState('')
@@ -40,7 +41,7 @@ export default ({navigation}) => {
             imagem: image
         }
         try {
-            criarDocumento(produto, 'Microempreendedores', 'teste', 'Produtos', nomeProduto)
+            criarDocumento(produto, 'Microempreendedores', user.email, 'Produtos', nomeProduto)
         } catch (e){
             console.log("Não foi possível cadastrar o produto. Erro: ", e)
         }
@@ -151,8 +152,8 @@ export default ({navigation}) => {
                             padding: '10px',
                             borderRadius: '5px',
                             border: 'none',
-                            height: '40px', // Adjust the height as needed
-                            fontSize: '16px', // Adjust the font size as needed
+                            height: '40px',
+                            fontSize: '16px',
                             maginTop: '10px'
                         }}
                         placeholder="Selecione a imagem do produto"

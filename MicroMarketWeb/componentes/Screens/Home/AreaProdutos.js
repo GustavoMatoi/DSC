@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from 'react-native'; // Removed import for FlatList
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'; 
 import Estilo from "../../Estilo";
-import { TouchableOpacity } from "react-native-web";
 
-export default ({navigation}) => {
+export default ({navigation, produtos, user}) => {
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -24,7 +23,7 @@ export default ({navigation}) => {
         }
     })
 
-    const produtos = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    const produtosAux = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
     return (
         <View style={[style.container]}>
@@ -32,15 +31,20 @@ export default ({navigation}) => {
                 <Text style={[Estilo.tituloMedio, Estilo.textoCorSecundaria]}>Produtos recentes</Text>
             </View>
             <View style={style.areaProdutos}>
-                {produtos.slice(0,5).map((i) =>
+                {produtos.length > 0 ?                 produtos.slice(0,5).map((i) =>
                     <Image
-                        source={{ uri: "https://m.media-amazon.com/images/I/71JZjGQi3lL._AC_UF894,1000_QL80_.jpg" }}
+                        source={{ uri: i.imagem }}
                         style={style.imagem}
                     />
-                )}
+                ) : <View>
+                        <Text style={[Estilo.tituloMedio, {color: 'white'}]}>Cadastre algum produto</Text>
+                        <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Produtos', {user: user})}>
+                            <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>CADASTRAR PRODUTO</Text>
+                        </TouchableOpacity>     
+                    </View>}
             </View>
             <View style={[{alignItems: 'flex-end', width: '98%'}]}>
-                <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Produtos')}>
+                <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Produtos', {user: user})}>
                     <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>VISUALIZAR PRODUTOS</Text>
                 </TouchableOpacity>
             </View>

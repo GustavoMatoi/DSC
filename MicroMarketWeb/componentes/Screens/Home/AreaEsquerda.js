@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { getAuth, signOut } from "firebase/auth";
 
 
-export default ({navigation}) => {
+export default ({navigation, imagem, user}) => {
     const style = StyleSheet.create({
         container: {
             width: '20%',
@@ -30,19 +30,19 @@ export default ({navigation}) => {
             <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria]}>Boas vindas!</Text>
             <View>
             {Platform.OS == 'web' ?             <img
-                src="https://pbs.twimg.com/media/F0HXHOTXwAAAxL-.jpg"
+                src={imagem}
                 width={200}
                 height={200}
                 style={{borderRadius: 100}}
             /> : 
             <Image
-            source={{uri: 'https://pbs.twimg.com/media/F0HXHOTXwAAAxL-.jpg'}}
+            source={{uri: imagem}}
             width={200}
             height={200}
             style={{borderRadius: 100}}
             />
             }
-            <TouchableOpacity style={[{width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', marginTop: -30}, Estilo.corPrimariaBackground]}>
+            <TouchableOpacity style={[{width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', marginTop: -30}, Estilo.corPrimariaBackground]} onPress={()=>navigation.navigate('Chat', {user: user})}>
                 <AntDesign name="message1" size={45} color="#B8BFFF" />
             </TouchableOpacity>
             </View>
@@ -51,6 +51,7 @@ export default ({navigation}) => {
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>PERFIL</Text>
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>VENDAS</Text>
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>DASHBOARDS</Text>
+                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]} onPress={() => navigation.goBack()}>VOLTAR</Text>
                 <Text onPress={() => logout()} style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>SAIR</Text>
             </View>
         </View>

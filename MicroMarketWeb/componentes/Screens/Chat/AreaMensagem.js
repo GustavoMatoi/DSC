@@ -1,26 +1,30 @@
-import React, { useState } from "react";
-import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
-import Estilo from "../../../Estilo";
-import { MaterialIcons } from '@expo/vector-icons'; 
+import React, {useState} from "react";
+import {Text, View, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
+import Estilo from "../../Estilo";
+import {firebase} from '../../../api/config'
 import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
 
-export default ({vendedor, email}) => {
+export default props => {
     const [mensagem, setMensagem] = useState('')
     const style = StyleSheet.create({
         container: {
             width: '100%',
-            height: 50,
+            height: '10%',
             flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-evenly'
+            justifyContent: 'center',
+            alignItems: 'center'
         },
-        textInput: {
-            width: '85%',
-            height: 40
+        areaDigitarMensagem: {
+            width: '80%',
+            height: '80%',
+            backgroundColor: 'white',
+            elevation: 10,
+            borderRadius: 5,
+            padding: 10
         },
         botao: {
-            width: 40,
-            height: 40,
+            width: '15%',
+            height: '80%',
             borderRadius: 20,
             justifyContent: 'center',
             alignItems: 'center'
@@ -32,17 +36,17 @@ export default ({vendedor, email}) => {
         const mensagemRef = collection(
           firebase,
           'Microempreendedores',
-         vendedor,
+         'teste',
           'Mensagens',
-          `Mensagens ${email}`,
+          `Mensagens gustavo`,
           'todasAsMensagens' 
         );
       
         const novaMensagem = {
           texto: mensagem,
           data: serverTimestamp(), // Timestamp: data atual
-          remetente: email,
-          destinatario: vendedor,
+          remetente: 'teste',
+          destinatario: 'gustavo',
         };
       
         addDoc(mensagemRef, novaMensagem)
@@ -54,16 +58,17 @@ export default ({vendedor, email}) => {
           });
           setMensagem('')
       };
-    return (
+
+    return(
         <View style={[style.container, Estilo.corSecundariaBackground]}>
-            <TextInput
-            style={[Estilo.corLight, style.textInput]}
-            onChangeText={(text) => setMensagem(text)}
-            placeholder="Digite sua mensagem..."
+            <TextInput style={[ style.areaDigitarMensagem]}
+            placeholder="Digite sua mensagem...."
+            placeholderTextColor={'#e3e3e3'}
             value={mensagem}
+            onChangeText={(text)=> setMensagem(text)}
             />
-            <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={()=> enviarMensagem(mensagem)}>
-            <MaterialIcons name="schedule-send" size={30} color="#DEE1FF" />
+            <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={() =>enviarMensagem(mensagem)}>
+                <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>ENVIAR</Text>
             </TouchableOpacity>
         </View>
     )
