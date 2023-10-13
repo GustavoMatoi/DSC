@@ -14,6 +14,7 @@ export default ({navigation, route}) => {
     const [user, setUser] = useState({})
     const [produtos, setProdutos] = useState([])
     const [carregando, setCarregando] = useState(true)
+    const [vendas, setVendas] = useState([])
     const style = StyleSheet.create({
         container: {
             width: '100%',
@@ -37,21 +38,26 @@ export default ({navigation, route}) => {
             const produtosRef = collection(bd, 'Microempreendedores', email, 'Produtos')
             const produtosSnapshot = await getDocs(produtosRef)
             const produtosAux = []
+            const vendasAux = []
             produtosSnapshot.forEach((i) => {
                 produtosAux.push(i.data())
             })
+
+            const vendasRef = collection(bd, 'Microempreendedores', email, 'Vendas')
+            const vendasSnapshot = await getDocs(vendasRef)
+
+            vendasSnapshot.forEach((i) => {
+                vendasAux.push(i.data())
+            })
             setCarregando(false)
             setProdutos(produtosAux)
+            setVendas(vendasAux)
+            console.log(vendasAux)
         }
         recuperarDados()
 
         return () => recuperarDados
     }, [] )
-
-    const recuperarProdutos = useCallback(() => {
-
-        
-    }, [])
 
    
     return (
@@ -63,7 +69,7 @@ export default ({navigation, route}) => {
             <AreaProdutos produtos={produtos} user={user} navigation={navigation}/>
         <View style={[{flexDirection: 'row', width: '100%', height: '57%'}]}>
         <AreaDashboards/>
-            <AreaVendas/>
+         <AreaVendas navigation={navigation} vendas={vendas} user={user}/>
         </View>
         </View>}
         </View>

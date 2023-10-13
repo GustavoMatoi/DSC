@@ -67,14 +67,7 @@ export default ({navigation, route}) => {
         fetchData()
     })
 
-/*
-        <View>
-            <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria]}>Não há produtos cadastrados.</Text>
-            <TouchableOpacity style={[{width: 200, marginBottom: 20, height: 50, justifyContent: 'center', alignItems: 'center',  borderRadius: 20, marginTop: 10}, Estilo.corSecundariaBackground]} onPress={() => navigation.navigate('Cadastrar Produtos')}>
-                   <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria, {fontWeight: 'bold'}]}>CADASTRAR PRODUTO</Text>
-               </TouchableOpacity>
-            </View>
-*/
+
 
     return (
         <View style={[style.container, Estilo.corPrimariaBackground]}>
