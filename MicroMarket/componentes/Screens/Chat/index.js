@@ -78,9 +78,8 @@ export default ({navigation, route}) => {
             <ScrollView>
                 {mensagens.map((i) => {
                     return(
-                        i.destinatario === email? 
-                    <MensagemRecebida texto={i.texto}/> :
-                    <MensagemEnviada texto={i.texto}/>
+                      i.remetente === email ? <MensagemEnviada texto={i.texto}></MensagemEnviada> : <MensagemRecebida texto={i.texto}></MensagemRecebida>
+
                     )
 
                 }) }

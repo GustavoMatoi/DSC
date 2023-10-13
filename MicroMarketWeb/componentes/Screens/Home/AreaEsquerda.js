@@ -51,7 +51,6 @@ export default ({navigation, imagem, user}) => {
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>PERFIL</Text>
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>VENDAS</Text>
                 <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>DASHBOARDS</Text>
-                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]} onPress={() => navigation.goBack()}>VOLTAR</Text>
                 <Text onPress={() => logout()} style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>SAIR</Text>
             </View>
         </View>

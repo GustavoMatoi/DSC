@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import Estilo from "../../../Estilo";
 import { MaterialIcons } from '@expo/vector-icons'; 
-import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, serverTimestamp } from "firebase/firestore";
+import { criarDocumento } from "../../../../bd/CRUD";
 
 export default ({vendedor, email}) => {
     const [mensagem, setMensagem] = useState('')
@@ -44,7 +45,18 @@ export default ({vendedor, email}) => {
           remetente: email,
           destinatario: vendedor,
         };
-      
+
+        const mensagemRef2 = doc(
+          firebase,
+          'Microempreendedores',
+          vendedor,
+          'Mensagens',
+          `Mensagens ${email}`
+        );
+
+        const msg2 = {remetente: email}
+          criarDocumento(msg2, 'Microempreendedores', vendedor, 'Mensagens', `Mensagens ${email}`)
+
         addDoc(mensagemRef, novaMensagem)
           .then((docRef) => {
             console.log('Nova mensagem inserida com o ID: ', docRef.id);

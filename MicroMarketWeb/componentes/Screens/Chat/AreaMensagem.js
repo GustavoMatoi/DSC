@@ -3,8 +3,9 @@ import {Text, View, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
 import Estilo from "../../Estilo";
 import {firebase} from '../../../api/config'
 import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
+import { criarDocumento } from "../../../api/crud";
 
-export default props => {
+export default ({remetente, email}) => {
     const [mensagem, setMensagem] = useState('')
     const style = StyleSheet.create({
         container: {
@@ -36,19 +37,24 @@ export default props => {
         const mensagemRef = collection(
           firebase,
           'Microempreendedores',
-         'teste',
+         email,
           'Mensagens',
-          `Mensagens gustavo`,
+          `Mensagens ${remetente}`,
           'todasAsMensagens' 
         );
       
         const novaMensagem = {
           texto: mensagem,
           data: serverTimestamp(), // Timestamp: data atual
-          remetente: 'teste',
-          destinatario: 'gustavo',
+          remetente: email,
+          destinatario: remetente,
         };
-      
+        
+        const msg2 = {remetente: remetente}
+          criarDocumento(msg2, 'Microempreendedores', email, 'Mensagens', `Mensagens ${remetente}`)
+
+
+        console.log(remetente)
         addDoc(mensagemRef, novaMensagem)
           .then((docRef) => {
             console.log('Nova mensagem inserida com o ID: ', docRef.id);

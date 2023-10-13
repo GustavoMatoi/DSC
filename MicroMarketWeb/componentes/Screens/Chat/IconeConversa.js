@@ -22,7 +22,7 @@ export default ({navigation, onPress, image, destinatario}) => {
     })
 
     return (
-        <TouchableOpacity style={[style.container, Estilo.corPrimariaBackground]}>
+        <TouchableOpacity style={[style.container, Estilo.corPrimariaBackground]} onPress={onPress} >
             <Image style={[style.imagem]} source={{uri: image || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}}/>
             <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria, {fontWeight: 'bold'}]}>{destinatario || 'Nome do destinatario'}</Text>
         </TouchableOpacity>

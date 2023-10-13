@@ -5,7 +5,7 @@ import Header from "./Header";
 import AreaMensagem from "./AreaMensagem";
 import MensagemEnviada from "./MensagemEnviada";
 import MensagemRecebida from "./MensagemRecebida";
-export default ({mensagens}) => {
+export default ({mensagens, cliente, email, remetente}) => {
     const style = StyleSheet.create({
         container: {
             width: '80%',
@@ -18,20 +18,23 @@ export default ({mensagens}) => {
         },
     });
 
+    console.log('email cliente remetnete', email, cliente, remetente)
     
     return (
         <View style={style.container}>
-            <Header destinatario={mensagens[0].destinatario} />
+            <Header destinatario={'CHAT'} />
             <ScrollView style={style.chat}>
                 {mensagens.map((i) => {
+                    alert(i.remetente)
                     return(
-                        i.remetente === 'teste' ? <MensagemEnviada texto={i.texto}></MensagemEnviada> : <MensagemRecebida texto={i.texto}></MensagemRecebida>
+                        i.remetente === email ? <MensagemEnviada texto={i.texto}></MensagemEnviada> : <MensagemRecebida texto={i.texto}></MensagemRecebida>
                     
                     )
                 })}
 
             </ScrollView>
-            <AreaMensagem />
+
+            <AreaMensagem remetente={remetente} email={email}  />
         </View>
     );
 }
