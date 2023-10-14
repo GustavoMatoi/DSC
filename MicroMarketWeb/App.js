@@ -12,6 +12,7 @@ import Cadastro from './componentes/Screens/Cadastro';
 import Chat from './componentes/Screens/Chat';
 import Vendas from './componentes/Screens/Vendas';
 import AreaPrintada from './componentes/Screens/Vendas/AreaPrintada';
+import Dashboards from './componentes/Screens/Dashboards';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -43,6 +44,7 @@ export default function App() {
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name='Vendas' component={Vendas}/>
         <Stack.Screen name='Relatório de Venda' component={AreaPrintada}/>
+        <Stack.Screen name='Dashboards' component={Dashboards}/>
       </Stack.Navigator>
     </NavigationContainer>
     );

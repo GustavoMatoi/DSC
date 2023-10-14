@@ -26,7 +26,7 @@ export default ({navigation, user, vendas}) =>{
             </View>
             <View style={[style.areaVendas]}>
             {vendas.slice(0,4).map((i, index) => <TouchableOpacity style={[ Estilo.corSecundariaBackground, {width: 400, height: 45, justifyContent: 'center', alignItems: 'center', marginTop: 10, borderRadius: 20}]}>
-                <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>Cliente {index} valor {index}</Text>
+                <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>Produto {i.produto.nome} valor {i.produto.precoIndividual}</Text>
             </TouchableOpacity>)}
             </View>
             <TouchableOpacity style={[Estilo.corSecundariaBackground, {width: 255, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 30 }]} onPress={()=>navigation.navigate('Vendas', {user: user, vendas: vendas})}>

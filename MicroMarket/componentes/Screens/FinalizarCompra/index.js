@@ -4,6 +4,7 @@ import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import RadioBotao from "./RadioBotao";
 import { criarDocumento } from "../../../bd/CRUD";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
 export default ({navigation, route}) => {
     const [selecionado, setSelecionado] = useState(0)
     const {produtos, total, email} = route.params
@@ -35,13 +36,30 @@ export default ({navigation, route}) => {
                 produtos: produtos[index],
                 metodo
             }
-            criarDocumento(compra, 'Clientes', email, 'Compras', `Compra ${ano}|${mes}|${dia}`)
-            const vendas = {
+            const venda = {
                 produto: produtos[index],
                 metodo
-
             }
-            criarDocumento(vendas, 'Microempreendedores', i.nomeVendedor, 'Vendas', `Venda ${ano}|${mes}|${dia}`)
+            const bd = getFirestore()
+            const compraRef = collection(bd,'Clientes', email, 'Compras')
+            addDoc(compraRef, compra)
+            .then((docRef) => {
+              console.log('Nova mensagem inserida com o ID: ', docRef.id);
+            })
+            .catch((error) => {
+              console.log('Erro ao inserir a nova mensagem', error);
+            });
+            const vendaRef = collection(bd, 'Microempreendedores', i.nomeVendedor, 'Vendas')
+
+            addDoc(vendaRef, venda)
+            .then((docRef) => {
+              console.log('Nova mensagem inserida com o ID: ', docRef.id);
+            })
+            .catch((error) => {
+              console.log('Erro ao inserir a nova mensagem', error);
+            });
+
+
         })
         
 

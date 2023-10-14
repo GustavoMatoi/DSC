@@ -25,7 +25,6 @@ export default ({mensagens, cliente, email, remetente}) => {
             <Header destinatario={'CHAT'} />
             <ScrollView style={style.chat}>
                 {mensagens.map((i) => {
-                    alert(i.remetente)
                     return(
                         i.remetente === email ? <MensagemEnviada texto={i.texto}></MensagemEnviada> : <MensagemRecebida texto={i.texto}></MensagemRecebida>
                     

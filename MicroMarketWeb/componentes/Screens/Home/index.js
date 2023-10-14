@@ -68,7 +68,7 @@ export default ({navigation, route}) => {
             <View style={{flexDirection: 'column', width: '80%'}}>
             <AreaProdutos produtos={produtos} user={user} navigation={navigation}/>
         <View style={[{flexDirection: 'row', width: '100%', height: '57%'}]}>
-        <AreaDashboards/>
+        <AreaDashboards navigation={navigation} user={user}  vendas={vendas}/>
          <AreaVendas navigation={navigation} vendas={vendas} user={user}/>
         </View>
         </View>}

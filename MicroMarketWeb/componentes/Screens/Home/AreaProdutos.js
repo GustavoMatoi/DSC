@@ -23,8 +23,6 @@ export default ({navigation, produtos, user}) => {
         }
     })
 
-    const produtosAux = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
     return (
         <View style={[style.container]}>
             <View style={[{height: '20%', padding: 20}]}>
