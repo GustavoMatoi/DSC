@@ -4,7 +4,7 @@ import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import RadioBotao from "./RadioBotao";
 import { criarDocumento } from "../../../bd/CRUD";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
 export default ({navigation, route}) => {
     const [selecionado, setSelecionado] = useState(0)
     const {produtos, total, email} = route.params
@@ -26,37 +26,45 @@ export default ({navigation, route}) => {
     const mes = data.getMonth()+1
     const ano = data.getFullYear()
 
-    console.log(produtos)
+    produtos.forEach((i, index) => {
+        console.log('i', i)
+    })
 
     const finalizarCompras = async () => {
         produtos.forEach((i, index) => {
+            console.log(i)
+            console.log('produtos[index]', produtos[index])
             let metodo = ''
             selecionado === 0? metodo = 'Cartão de Crédito' : selecionado === 1? metodo = 'Boleto' : metodo = 'Pix'
             const compra = {
-                produtos: produtos[index],
-                metodo
+                produtos: i,
+                metodo,
+                data: serverTimestamp(),
+
             }
             const venda = {
-                produto: produtos[index],
-                metodo
+                produto: i,
+                metodo,
+                data: serverTimestamp(),
+
             }
             const bd = getFirestore()
             const compraRef = collection(bd,'Clientes', email, 'Compras')
             addDoc(compraRef, compra)
             .then((docRef) => {
-              console.log('Nova mensagem inserida com o ID: ', docRef.id);
+              console.log('Nova compra inserida com o ID: ', docRef.id);
             })
             .catch((error) => {
-              console.log('Erro ao inserir a nova mensagem', error);
+              console.log('Erro ao inserir a nova compra', error);
             });
             const vendaRef = collection(bd, 'Microempreendedores', i.nomeVendedor, 'Vendas')
 
             addDoc(vendaRef, venda)
             .then((docRef) => {
-              console.log('Nova mensagem inserida com o ID: ', docRef.id);
+              console.log('Nova venda inserida com o ID: ', docRef.id);
             })
             .catch((error) => {
-              console.log('Erro ao inserir a nova mensagem', error);
+              console.log('Erro ao inserir a nova venda', error);
             });
 
 

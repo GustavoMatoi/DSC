@@ -3,6 +3,7 @@ import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image, Touchable} f
 import Estilo from "../../Estilo";
 import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
 import {criarDocumento} from '../../../api/crud'
+import { serverTimestamp } from "firebase/firestore";
 export default ({navigation, route}) => {
     const {user} = route.params
     const [image, setImage] = useState('')
@@ -38,7 +39,9 @@ export default ({navigation, route}) => {
             estoque: parseInt(estoque),
             precoIndividual: parseFloat(precoIndividual),
             tags: tagsAux, 
-            imagem: image
+            imagem: image,
+            nomeVendedor: user.email,
+            data: serverTimestamp(),
         }
         try {
             criarDocumento(produto, 'Microempreendedores', user.email, 'Produtos', nomeProduto)
