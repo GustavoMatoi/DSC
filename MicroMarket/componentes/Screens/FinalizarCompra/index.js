@@ -5,8 +5,11 @@ import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import RadioBotao from "./RadioBotao";
 import { criarDocumento } from "../../../bd/CRUD";
 import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 export default ({navigation, route}) => {
     const [selecionado, setSelecionado] = useState(0)
+    const [cardDetails, setCardDetails] = useState('')
     const {produtos, total, email} = route.params
     const style = StyleSheet.create({
         container: {
@@ -17,7 +20,14 @@ export default ({navigation, route}) => {
             marginTop: 10,
             width: '100%',
             alignItems: 'center'
-        }
+        },
+        cartaoDeCredito: {
+            width: '90%',
+            backgroundColor: '#efefef',
+            height: 50,
+            margin: 20
+        },
+
     })
     console.log('produtos', total)
 
@@ -74,48 +84,57 @@ export default ({navigation, route}) => {
     }
 
     return (
-        <ScrollView style={[style.container, Estilo.corSecundariaBackground]}>
-            <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria, Estilo.centralizado]}>FINALIZAR COMPRA</Text>
-            <View style={[style.areaProdutos]}>
-                <View style={{alignItems: 'flex-start'}}>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, {marginLeft: '5%'}]}>ITENS </Text>
-                </View>
-                {produtos.map((i) => 
-                                    <View style={[{marginTop: '5%'}]}>
-                                <ProdutoNoCarrinho
-                                nome={i.nome}
-                                imagem={i.imagem}
-                                descricao={i.descricao}
-                                />                
-                                </View>
-                )}
+        <StripeProvider>
+                    <ScrollView style={[style.container, Estilo.corSecundariaBackground]}>
+                    <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria, Estilo.centralizado]}>FINALIZAR COMPRA</Text>
+                    <View style={[style.areaProdutos]}>
+                        <View style={{alignItems: 'flex-start'}}>
+                            <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, {marginLeft: '5%'}]}>ITENS </Text>
+                        </View>
+                        {produtos.map((i) => 
+                                            <View style={[{marginTop: '5%'}]}>
+                                        <ProdutoNoCarrinho
+                                        nome={i.nome}
+                                        imagem={i.imagem}
+                                        descricao={i.descricao}
+                                        />                
+                                        </View>
+                        )}
 
-            </View>
-            <View style={[style.areaProdutos]}>
-                <View style={{alignItems: 'flex-start'}}>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, {marginLeft: '5%'}]}>PAGAMENTO </Text>
-                </View>
-                <View style={[{marginTop: '5%',  width:'95%'}]}>
-                <RadioBotao
-                            options={['Cartão de Crédito', 'Boleto', 'Pix']}
-                            selected={selecionado}
-                            onChangeSelect={(opt, i) => { setSelecionado(i);}}
-                        />
-                </View>
-                <View style={[{marginTop: '5%', width:'95%'}]}>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, Estilo.centralizado]}>ENVIAR PARA</Text>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Endereço do usuário</Text>
-                </View>
-                <View style={[{marginTop: '5%', width:'95%'}]}>
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, Estilo.centralizado]}>TOTAL</Text>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>R${total}</Text>
-                </View>
-            </View>
-            <View style={[{marginVertical: '10%', alignItems: 'center'}]}>
-                <TouchableOpacity style={[{width: '80%', height: 50, backgroundColor: '#C0FFBB', justifyContent: 'center', alignItems: 'center', borderRadius: 20}]} onPress={()=> finalizarCompras()}>
-                    <Text style={[Estilo.tituloPequeno, {color: '#024C00'}]}>Finalizar compra</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+                    </View>
+                    <View style={[style.areaProdutos]}>
+                        <View style={{alignItems: 'flex-start'}}>
+                            <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, {marginLeft: '5%'}]}>PAGAMENTO </Text>
+                        </View>
+                        <View style={[{marginTop: '5%',  width:'95%'}]}>
+                        <RadioBotao
+                                    options={['Cartão de Crédito', 'Boleto', 'Pix']}
+                                    selected={selecionado}
+                                    onChangeSelect={(opt, i) => { setSelecionado(i);}}
+                                />
+                        {selecionado === 0? 
+                        <CardField
+                            placeholders={{number: '4242 4242 4242 4242'}}
+                            style={[style.cartaoDeCredito]}
+                            cardStyle={Estilo.corLight}
+                            onCardChange={text=> setCardDetails(text)}
+                        /> : null}
+                        </View>
+                        <View style={[{marginTop: '5%', width:'95%'}]}>
+                            <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, Estilo.centralizado]}>ENVIAR PARA</Text>
+                            <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>Endereço do usuário</Text>
+                        </View>
+                        <View style={[{marginTop: '5%', width:'95%'}]}>
+                            <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria, Estilo.centralizado]}>TOTAL</Text>
+                            <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>R${total}</Text>
+                        </View>
+                    </View>
+                    <View style={[{marginVertical: '10%', alignItems: 'center'}]}>
+                        <TouchableOpacity style={[{width: '80%', height: 50, backgroundColor: '#C0FFBB', justifyContent: 'center', alignItems: 'center', borderRadius: 20}]} onPress={()=> /*finalizarCompras()*/ console.log('cardDetails', cardDetails)}>
+                            <Text style={[Estilo.tituloPequeno, {color: '#024C00'}]}>Finalizar compra</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+        </StripeProvider>
     )
 }
