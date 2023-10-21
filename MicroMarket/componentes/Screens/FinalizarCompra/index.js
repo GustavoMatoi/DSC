@@ -1,15 +1,20 @@
 import React, {useState, useEffect} from "react";
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native'
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from 'react-native'
 import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import RadioBotao from "./RadioBotao";
 import { criarDocumento } from "../../../bd/CRUD";
 import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
-import { StripeProvider } from "@stripe/stripe-react-native";
+import { StripeProvider, confirmPayment } from "@stripe/stripe-react-native";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+const API_URL = "http://192.168.1.3:3000";
+
 export default ({navigation, route}) => {
-    const [selecionado, setSelecionado] = useState(0)
+
+    const [selecionado, setSelecionado] = useState(-1)
     const [cardDetails, setCardDetails] = useState('')
+    const [finalizando, setFinalizando] = useState(false)
     const {produtos, total, email} = route.params
     const style = StyleSheet.create({
         container: {
@@ -39,6 +44,58 @@ export default ({navigation, route}) => {
     produtos.forEach((i, index) => {
         console.log('i', i)
     })
+    const fetchPaymentIntentClientSecret = async (valor, pagamento) => {
+        setFinalizando(true)
+        const response = await fetch(`${API_URL}/create-payment-intent`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({valor, pagamento})
+        });
+        const { clientSecret, error } = await response.json();
+        return { clientSecret, error };
+      };
+    
+      const handlePayPress = async () => {
+        console.log('cardDetails', cardDetails)
+        if (!cardDetails?.complete || !email) {
+          Alert.alert("Dados não preenchidos", "Por favor, preencha corretamente os dados do seu cartão.");
+          return;
+        }
+        const billingDetails = {
+            email: email, 
+          };
+          console.log('email', email)
+        try {
+          const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+          if (error) {
+            console.log("Não foi possível processar o pagamento");
+            setFinalizando(false)
+          } else {
+    
+            const { paymentIntent, error } = await confirmPayment(clientSecret, {
+                paymentMethodType: "Card", 
+                billingDetails: billingDetails,
+              });
+            if (error) {
+              Alert.alert("Erro", `Ocorreu o seguinte erro no pagamento: ${error.message}`);
+              console.log('cardDetails', cardDetails)
+              setFinalizando(false)
+
+            } else if (paymentIntent) {
+              Alert.alert("Concluído", "Pagamento concluído com sucesso.");
+              console.log("Payment successful ", paymentIntent);
+              finalizarCompras()
+              navigation.navigate('Sucesso')
+            }
+          }
+        } catch (e) {
+          console.log("Erro", e);
+        }
+      };
+    
+
 
     const finalizarCompras = async () => {
         produtos.forEach((i, index) => {
@@ -79,12 +136,14 @@ export default ({navigation, route}) => {
 
 
         })
-        
+        setFinalizando(false)
 
     }
 
     return (
-        <StripeProvider>
+        <StripeProvider
+        publishableKey='pk_test_51O2jUCAJXIuRfKFnepaYXce78eg6jVY001MN2jaTTem1dlGS2hF2Gr60oeuYH20lZ1dFnPcijS5sbt0L7U4Sw7Ww00MDJ0zSCN'>
+        
                     <ScrollView style={[style.container, Estilo.corSecundariaBackground]}>
                     <Text style={[Estilo.tituloMedio, Estilo.textoCorPrimaria, Estilo.centralizado]}>FINALIZAR COMPRA</Text>
                     <View style={[style.areaProdutos]}>
@@ -130,9 +189,14 @@ export default ({navigation, route}) => {
                         </View>
                     </View>
                     <View style={[{marginVertical: '10%', alignItems: 'center'}]}>
-                        <TouchableOpacity style={[{width: '80%', height: 50, backgroundColor: '#C0FFBB', justifyContent: 'center', alignItems: 'center', borderRadius: 20}]} onPress={()=> /*finalizarCompras()*/ console.log('cardDetails', cardDetails)}>
+                        <TouchableOpacity style={[{width: '80%', height: 50, backgroundColor: '#C0FFBB', justifyContent: 'center', alignItems: 'center', borderRadius: 20}]} onPress={()=>handlePayPress()}>
                             <Text style={[Estilo.tituloPequeno, {color: '#024C00'}]}>Finalizar compra</Text>
                         </TouchableOpacity>
+                        <Spinner
+                visible={finalizando}
+                textContent={'Finalizando pagamento...'}
+                textStyle={[Estilo.textoCorSecundaria, Estilo.texto15px]}
+                />              
                     </View>
                 </ScrollView>
         </StripeProvider>

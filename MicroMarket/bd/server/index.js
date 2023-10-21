@@ -11,3 +11,22 @@ const stripe = Stripe(SECRET_KEY, { apiVersion: "2023-10-16" })
 app.listen(porta, '192.168.1.3', () => {
     console.log(`listening at https://192.168.1.3:${porta}`)
 })
+
+app.post("/create-payment-intent", async (req, res) => {
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: 1099,
+        currency: "brl",
+        payment_method_types: ["card"], 
+      });
+  
+      const clientSecret = paymentIntent.client_secret;
+  
+      res.json({
+        clientSecret: clientSecret,
+      });
+    } catch (e) {
+      console.log(e.message);
+      res.json({ error: e.message });
+    }
+  });

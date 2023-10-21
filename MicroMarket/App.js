@@ -16,6 +16,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Main from './componentes/Screens/Main';
 import Routes from './componentes/Routes';
+import PagamentoBemSucedido from './componentes/Screens/FinalizarCompra/PagamentoBemSucedido';
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Stack.Screen name="Carrinho" component={Carrinho} options={{ headerShown: false }} />
         <Stack.Screen name="Finalizar compra" component={FinalizarCompra} />
         <Stack.Screen name="Chat" component={Chat}/>
+        <Stack.Screen name="Sucesso" component={PagamentoBemSucedido} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
 
