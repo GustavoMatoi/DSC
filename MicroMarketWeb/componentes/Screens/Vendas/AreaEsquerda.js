@@ -48,9 +48,7 @@ export default ({navigation, imagem, user}) => {
             </View>
 
             <View style={[style.areaLinks]}>
-                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>PERFIL</Text>
-                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>VENDAS</Text>
-                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>DASHBOARDS</Text>
+                <Text style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]} onPress={() => navigation.goBack()}>HOME</Text>
                 <Text onPress={() => logout()} style={[Estilo.textoCorPrimaria, Estilo.tituloPequeno]}>SAIR</Text>
             </View>
         </View>

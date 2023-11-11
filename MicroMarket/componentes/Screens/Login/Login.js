@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {View, StyleSheet, Dimensions, Text, TextInput, Alert} from 'react-native'
+import {View, StyleSheet, Dimensions, Text, TextInput, Alert, TouchableOpacity} from 'react-native'
 import Estilo from "../../Estilo";
 import InputTexto from "../../Inputs/InputTexto";
 import Logo from "../../Logo";
@@ -50,7 +50,9 @@ export default ({navigation}) => {
             </View>
 
             <View style={[{marginTop: '10%', width: '50%', alignItems: 'center'}, Estilo.centralizado]}>
-                    <BotaoPrimario onPress={()=> handleLogin(email, senha)} texto={"Entrar"}/>
+                    <TouchableOpacity onPress={() => handleLogin(email, senha)} style={[style.containerBotao, Estilo.corSecundariaBackground]}>
+                        <Text>Entrar</Text>
+                    </TouchableOpacity>
             </View>
         
             <View style={[Estilo.centralizado, {marginTop: '10%'}]}>
@@ -82,5 +84,12 @@ const style = StyleSheet.create({
         fontSize: 15,
         backgroundColor: 'white',
         borderRadius: 10
+    },
+    containerBotao: {
+        height: 50, 
+        width: '100%',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

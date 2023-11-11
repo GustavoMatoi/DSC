@@ -82,6 +82,7 @@ export default ({navigation}) => {
                     <Text style={[Estilo.texto20px, Estilo.textoCorSecundaria, {marginVertical: 10}]}>Senha:</Text>
                     <TextInput
                         style={[style.textInput]}
+                        secureTextEntry={true}
                         onChangeText={(text)=>setSenha(text)}
                     />
                 </View>

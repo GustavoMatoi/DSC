@@ -46,7 +46,6 @@ export default ({route, navigation}) => {
                 <Text style={[{fontWeight: 'bold'}, Estilo.textoCorPrimaria]}>Imagem: <img width={500} height={500} src={item.produto.imagem}/></Text>
 
                 </View>
-                <Text style={[{fontWeight: 'bold'}, Estilo.textoCorPrimaria]}>Nome do Vendedor: {item.nomeVendedor}</Text>
                 <Text style={[{fontWeight: 'bold'}, Estilo.textoCorPrimaria]}>Preço Individual: {item.produto.precoIndividual}</Text>
             </View>
         <Button title="Printar" style={{width: '5%'}} onPress={()=>gerarPdf(item)}></Button> 
