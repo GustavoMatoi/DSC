@@ -45,6 +45,8 @@ export default ({navigation}) => {
                         onChangeText={(text) => setSenha(text)}
                         placeholder={'Informe sua senha'}
                         style={style.containerInput}
+                        secureTextEntry={true}
+
                     />
                         </View>
             </View>

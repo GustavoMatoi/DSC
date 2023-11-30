@@ -65,6 +65,14 @@ export default ({remetente, email}) => {
           setMensagem('')
       };
 
+
+      const verificaMensagem = (mensagem) => {
+        if(mensagem !== ''){
+          enviarMensagem(mensagem)
+        } else {
+          alert("Escreva uma mensagem antes de prosseguir")
+        }
+      }
     return(
         <View style={[style.container, Estilo.corSecundariaBackground]}>
             <TextInput style={[ style.areaDigitarMensagem]}
@@ -73,7 +81,7 @@ export default ({remetente, email}) => {
             value={mensagem}
             onChangeText={(text)=> setMensagem(text)}
             />
-            <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={() =>enviarMensagem(mensagem)}>
+            <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={() =>verificaMensagem(mensagem)}>
                 <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>ENVIAR</Text>
             </TouchableOpacity>
         </View>

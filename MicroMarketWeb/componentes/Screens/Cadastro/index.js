@@ -15,6 +15,15 @@ export default ({navigation}) => {
     const [cnpj, setCnpj] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+    const [nomeInvalido, setNomeInvalido] = useState(false)
+    const [estadoInvalido, setEstadoInvalido] = useState(false)
+    const [cidadeInvalido, setCidadeInvalido] = useState(false)
+    const [bairroInvalido, setBairroInvalido] = useState(false)
+    const [ruaInvalido, setRuaInvalido] = useState(false)
+    const [numeroInvalido, setNumeroInvalido] = useState(false)
+    const [cnpjInvalido, setCnpjInvalido] = useState(false)
+    const [emailInvalido, setEmailInvalido] = useState(false)
+    const [senhaInvalido, setSenhaInvalido] = useState(false)
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -34,6 +43,9 @@ export default ({navigation}) => {
       };
 
       const cadastrarUsuario = async () => {
+        const verificada = verificaCampos()
+        if(verificada){
+            
         const usuario = {
             nome,
             endereco : {
@@ -47,16 +59,75 @@ export default ({navigation}) => {
             email,
             senha
         }
+
+
         try {
-            if(criarDocumento(usuario, 'Microempreendedores', email)){
-                firebase.auth().createUserWithEmailAndPassword(email, senha)
-                alert("Usuário cadastrado com sucesso!")
-                navigation.navigate('Login')
-            }
+        
+                if(criarDocumento(usuario, 'Microempreendedores', email)){
+                    firebase.auth().createUserWithEmailAndPassword(email, senha)
+                    alert("Usuário cadastrado com sucesso!")
+                    navigation.navigate('Login')
+                }
+            
             
         } catch (e){
             console.log("Não foi possível cadastrar o usuário. Erro: ", e)
         }
+        } else {
+            alert("Campos não preenchidos.")
+        }
+    }
+
+    const verificaCampos = () => {
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regexEmail.test(email)) {
+            alert("Email inválido");
+        }
+
+        let invalida = false
+        if (nome === '') {
+            setNomeInvalido(true);
+            invalida = true
+        }
+        if (estado === '') {
+            setEstadoInvalido(true);
+            invalida = true
+        }
+        if (rua === '') {
+            setRuaInvalido(true);
+            invalida = true
+        }
+        if (cidade === '') {
+            setCidadeInvalido(true);
+            invalida = true
+        }
+        if (numero === '') {
+            setNumeroInvalido(true);
+            invalida = true
+        }
+        if (cnpj === '') {
+            setCnpjInvalido(true);
+            invalida = true
+        }
+        if (email === '') {
+            setEmailInvalido(true);
+            invalida = true
+        }
+        if (senha === '') {
+            setSenhaInvalido(true);
+            invalida = true
+        }
+        if (bairro === '') {
+            setBairroInvalido(true);
+            invalida = true
+        }
+        if(invalida){
+            return false
+        } else {
+            return true;
+
+        }
+
     }
       
     const style = StyleSheet.create({
@@ -98,19 +169,19 @@ export default ({navigation}) => {
                     <View style={[style.espacamento]}>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>NOME(obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, {marginVertical: 10}]}
+                        placeholder="Informe o seu nome"
+                        style={[style.textInput, nomeInvalido ? {borderWidth: 1, borderColor: 'red'} : {}, {marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
                         value={nome}
                         onChangeText={(text) => setNome(text)}
-
+            
                     />
                     </View>
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>ESTADO (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe a descrição do pruduto"
-                        style={[style.textInput, {marginVertical: 10}]}
+                        placeholder="Informe o seu estado"
+                        style={[style.textInput, estadoInvalido ? {borderWidth: 1, borderColor: 'red'} : {} ,{marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
                         value={estado}
                         onChangeText={(text) => setEstado(text)}
@@ -119,8 +190,8 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>CIDADE (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o estoque do pruduto"
-                        style={[style.textInput, {marginVertical: 10}]}
+                        placeholder="Informe a sua cidade"
+                        style={[style.textInput, cidadeInvalido ? {borderWidth: 1, borderColor: 'red'} : {} , {marginVertical: 10}]}
                         placeholderTextColor='#e3e3e3'
                         value={cidade}
                         onChangeText={(text) => setCidade(text)}
@@ -129,8 +200,8 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>BAIRRO (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, ]}
+                        placeholder="Informe o seu bairro"
+                        style={[style.textInput,  bairroInvalido ? {borderWidth: 1, borderColor: 'red'} : {}  ]}
                         placeholderTextColor='#e3e3e3'
                         value={bairro}
                         onChangeText={(text) => setBairro(text)}
@@ -139,8 +210,8 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>RUA (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, ]}
+                        placeholder="Informe sua rua "
+                        style={[style.textInput, ruaInvalido ? {borderWidth: 1, borderColor: 'red'} : {}  ]}
                         placeholderTextColor='#e3e3e3'
                         value={rua}
                         onChangeText={(text) => setRua(text)}
@@ -149,8 +220,8 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>NÚMERO (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, ]}
+                        placeholder="Informe o numero"
+                        style={[style.textInput,  numeroInvalido ? {borderWidth: 1, borderColor: 'red'} : {}  ]}
                         placeholderTextColor='#e3e3e3'
                         value={numero}
                         onChangeText={(text) => setNumero(text)}
@@ -159,8 +230,8 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>CNPJ (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, ]}
+                        placeholder="Informe o CNPJ"
+                        style={[style.textInput,  cnpjInvalido ? {borderWidth: 1, borderColor: 'red'} : {} ]}
                         placeholderTextColor='#e3e3e3'
                         value={cnpj}
                         onChangeText={(text) => setCnpj(text)}
@@ -169,8 +240,8 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>Email (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, ]}
+                        placeholder="Informe o email"
+                        style={[style.textInput, emailInvalido ? {borderWidth: 1, borderColor: 'red'} : {}  ]}
                         placeholderTextColor='#e3e3e3'
                         value={email}
                         onChangeText={(text) => setEmail(text)}
@@ -179,11 +250,13 @@ export default ({navigation}) => {
                     <View>
                     <Text style={[Estilo.tituloPequeno, Estilo.textoCorSecundaria]}>Senha (obrigatório)</Text>
                     <TextInput
-                        placeholder="Informe o nome do pruduto"
-                        style={[style.textInput, ]}
+                        placeholder="Informe a senha"
+                        style={[style.textInput, senhaInvalido ? {borderWidth: 1, borderColor: 'red'} : {}  ]}
                         placeholderTextColor='#e3e3e3'
                         value={senha}
                         onChangeText={(text) => setSenha(text)}
+                        secureTextEntry={true}
+
                     />
                     </View>
                 </View>

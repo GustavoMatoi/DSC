@@ -2,19 +2,21 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     corPrimariaBackground: {
-        backgroundColor: '#0F0765'
+        backgroundColor: '#B8BFFF'
+
     },
     corSecundariaBackground: {
-        backgroundColor: '#B8BFFF'
+        backgroundColor: '#0F0765'
     },
     corLight: {
         backgroundColor: '#DEE1FF'
     },
     textoCorPrimaria: {
-        color: '#0F0765'
+        color: '#B8BFFF'
+
     },
     textoCorSecundaria: {
-        color: '#B8BFFF'
+        color: '#0F0765'
     },
     tituloGrande: {
         fontSize: 48, 

@@ -61,17 +61,28 @@ export default ({navigation, route}) => {
 
    
     return (
-        <View style={[style.container, Estilo.corPrimariaBackground]}>
-            <AreaEsquerda imagem={user.imagem} user={user} navigation={navigation}></AreaEsquerda>
-            {carregando? <Text>Carregando</Text> 
-            :
+<View style={[style.container, Estilo.corPrimariaBackground]}>
+<AreaEsquerda imagem={user.imagem} user={user} navigation={navigation}></AreaEsquerda>
+
+    {user ? (
+        carregando ? (
+            <Text>Carregando</Text>
+        ) : (
+
             <View style={{flexDirection: 'column', width: '80%'}}>
-            <AreaProdutos produtos={produtos} user={user} navigation={navigation}/>
-        <View style={[{flexDirection: 'row', width: '100%', height: '57%'}]}>
-        <AreaDashboards navigation={navigation} user={user}  vendas={vendas}/>
-         <AreaVendas navigation={navigation} vendas={vendas} user={user}/>
-        </View>
-        </View>}
-        </View>
+                <AreaProdutos produtos={produtos} user={user} navigation={navigation} />
+                <View style={[{flexDirection: 'row', width: '100%', height: '57%'}]}>
+                    <AreaDashboards navigation={navigation} user={user} vendas={vendas} />
+                    <AreaVendas navigation={navigation} vendas={vendas} user={user} />
+                </View>
+            </View>
+        )
+    ) : (
+        (() => {
+            alert("Usuário não tem acesso à aplicação.");
+            navigation.navigate('Login');
+        })()
+    )}
+</View>
     )
 }

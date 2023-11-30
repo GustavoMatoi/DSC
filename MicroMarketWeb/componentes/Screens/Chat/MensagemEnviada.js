@@ -32,7 +32,7 @@ export default ({texto}) => {
     viewBox={`0 0 ${20} ${20}`}
     style={[{ transform: [{ rotate: '-90deg' }], borderWidth: 1, marginTop: 10, marginLeft: -2}]}
   >
-    <Polygon points={` 0, 0,${20},0 ${20 / 2},${20}`} fill={'#DEE1FF'} />
+    <Polygon points={` 0, 0,${20},0 ${20 / 2},${20}`} fill={'#B8BFFF'} />
   </Svg>     
 </View>
     )

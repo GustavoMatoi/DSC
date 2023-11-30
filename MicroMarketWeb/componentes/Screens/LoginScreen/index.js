@@ -51,8 +51,12 @@ export default ({navigation}) => {
 
     const handleNavigation = () => {
         try {
-            firebase.auth().signInWithEmailAndPassword(email, senha)
-            navigation.navigate('Home', {email})
+            if(email !== '' && senha !== ''){
+                firebase.auth().signInWithEmailAndPassword(email, senha)
+                navigation.navigate('Home', {email})
+            } else {
+                alert("Preencha as informações de login")
+            }
         } catch(error){
             alert("Não foi possível realizar login", error)
         }
@@ -84,6 +88,7 @@ export default ({navigation}) => {
                         style={[style.textInput]}
                         secureTextEntry={true}
                         onChangeText={(text)=>setSenha(text)}
+                        
                     />
                 </View>
             </View>

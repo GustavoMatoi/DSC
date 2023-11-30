@@ -106,12 +106,16 @@ export default ({navigation, route}) => {
                     />
                     </VictoryChart>
                 </View>
-                <View style={{width: '50%', justifyContent: 'center', alignItems: 'center'}}>
+                <View >
                 <Text style={[Estilo.tituloPequeno,Estilo.textoCorPrimaria]}>Vendas por produto</Text>
-                <VictoryPie
-                  colorScale={["tomato", "orange", "gold", "cyan", "navy" ]}
-                data={profitData}
-                />
+                        {
+                            profitData.map((item) => 
+                             <View>
+                                    <Text>Produto: {item.x}</Text>
+                                    <Text>Lucro por vendas: {item.y}</Text>
+                                    </View>)
+                            
+                        }
                 </View>
                 </View>
 

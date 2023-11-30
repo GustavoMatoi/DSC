@@ -8,8 +8,8 @@ const SECRET_KEY = "sk_test_51O2jUCAJXIuRfKFnUhwxrDp3RqsryQzqBE0HaRfn0pKP9eh7qaF
 
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2023-10-16" })
 
-app.listen(porta, '192.168.1.3', () => {
-    console.log(`listening at https://192.168.1.3:${porta}`)
+app.listen(porta, '172.25.6.98', () => {
+    console.log(`listening at https://172.25.6.98:${porta}`)
 })
 
 app.post("/create-payment-intent", async (req, res) => {

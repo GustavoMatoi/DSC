@@ -63,7 +63,11 @@ export default ({navigation}) => {
             bairro == '' ? setBairroInvalido(true) : setBairroInvalido(false)
             rua == '' ? setRuaInvalido(true) : setRuaInvalido(false)
             numero == '' ? setNumeroInvalido(true) : setNumeroInvalido(false)
-            email == '' ? setEmailInvalido(true) : setEmailInvalido(false) 
+
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (regexEmail.test(email)) {
+                setEmailInvalido(true)
+            }         
             senha == '' ? setSenhaInvalido(true) : setSenhaInvalido(false)
         } else {
             novoCliente.setNome(nome)
@@ -101,11 +105,6 @@ export default ({navigation}) => {
         }
     }
 
-    useEffect(() => {
-        //recuperarDocumentos('Clientes', 'emailDoCliente@email.com', 'Carrinho')
-        //criarDocumento({teste: 'x', parametro2: 'y'}, 'Clientes', 'teste')
-        //excluirDocumento('Clientes', 'teste')
-    }, [])    
     return (
         <ScrollView style={[style.container, Estilo.corPrimariaBackground ]}>
             <View style={[style.areaPreenchimento]}>
@@ -199,6 +198,7 @@ export default ({navigation}) => {
                     placeholder="Informe sua senha"
                     placeholderTextColor={'#C3C3C3'}
                     value={senha}
+                    secureTextEntry={true}
                     onChangeText={(senha) => setSenha(senha)}
                     />
                 </View>

@@ -29,7 +29,7 @@ export default ({texto}) => {
         viewBox={`0 0 ${20} ${20}`}
         style={[{ transform: [{ rotate: '90deg' }], borderWidth: 1, marginTop: 12, marginLeft: -2}]}
       >
-        <Polygon points={` 0, 0,${20},0 ${20 / 2},${20}`} fill={'#B8BFFF'} />
+        <Polygon points={` 0, 0,${20},0 ${20 / 2},${20}`} fill={'#0F0765'} />
 
       </Svg>     
             <View style={[style.balao, Estilo.corSecundariaBackground]}>
