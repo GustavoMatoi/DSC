@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Image, Alert} from 'react-native'
 import Estilo from "../../Estilo";
 import {firebase} from '../../../bd/config'
 import { recuperarDocumentos } from "../../../bd/CRUD";
@@ -79,33 +79,40 @@ export default ({navigation}) => {
         }
     })
 
-
+    if(!user){
+        Alert.alert("Usuário inválido", "O usuário não tem permissão para acessar a aplicação.")
+        firebase.auth().signOut()
+        navigation.navigate('Login')
+    }
 
     return (
         <View style={[style.container, Estilo.corPrimariaBackground]}>
             <View style={[style.header]}>
                 <Text style={[Estilo.tituloMedio, Estilo.textoCorSecundaria]}>PERFIL</Text>
             </View>
+        {
+            user? 
             <View style={[Estilo.corSecundariaBackground, style.body]}>
-                <View style={[style.areaImagem]}>
-                    <Image
-                        source={{uri: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }}
-                        style={[style.imagem]}
-                    />
-                    <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>{user.nome}</Text>
-                </View>
-
-                <View style={[style.areaInformacoes]}>
-                    <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>{user.email}</Text>
-
-                </View>
-                <View style={[style.areaBotoes]}>
-
-                    <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={()=> navigation.navigate("Carrinho", {navigation: navigation, email: user.email})}>
-                        <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria]}>CARRINHO</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={[style.areaImagem]}>
+                <Image
+                    source={{uri: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }}
+                    style={[style.imagem]}
+                />
+                <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>{user.nome}</Text>
             </View>
+
+            <View style={[style.areaInformacoes]}>
+                <Text style={[Estilo.texto15px, Estilo.textoCorPrimaria]}>{user.email}</Text>
+
+            </View>
+            <View style={[style.areaBotoes]}>
+
+                <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={()=> navigation.navigate("Carrinho", {navigation: navigation, email: user.email})}>
+                    <Text style={[Estilo.texto15px, Estilo.textoCorSecundaria]}>CARRINHO</Text>
+                </TouchableOpacity>
+            </View>
+        </View> : null
+        }
         </View>
     )
 }

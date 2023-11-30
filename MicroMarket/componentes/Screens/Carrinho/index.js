@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from "react";
-import {View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native'
+import {View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity, Alert } from 'react-native'
 import Estilo from "../../Estilo";
 import ProdutoNoCarrinho from "./ProdutoNoCarrinho";
 import { excluirDocumento, recuperarDocumentos } from "../../../bd/CRUD";
@@ -51,6 +51,14 @@ export default ({navigation, route}) => {
         }
     }, []);
     
+    const handleNavigation = () => {
+        if(produtosNoCarrinho.length === 0){
+            Alert.alert("Carrinho vazio.","É necessário que tenha pelo menos um produto no carrinho antes de prosseguir.")
+        } else {
+            navigation.navigate("Finalizar compra", {produtos: produtosNoCarrinho, total: total, email})
+
+        }
+    }
 
     const excluirProduto = useCallback(async (produto) => {
         console.log(produto.nome)
@@ -89,7 +97,7 @@ export default ({navigation, route}) => {
                 <Text style={[Estilo.tituloPequeno, Estilo.textoCorPrimaria]}>
                     R$ {total}
                 </Text>
-                <TouchableOpacity style={[style.botao, {backgroundColor:'#6DFB72' }]} onPress={()=> navigation.navigate("Finalizar compra", {produtos: produtosNoCarrinho, total: total, email})}>
+                <TouchableOpacity style={[style.botao, {backgroundColor:'#6DFB72' }]} onPress={()=> handleNavigation()}>
                     <Text style={[Estilo.texto15px, {color: 'green', fontWeight: 'bold'}]}>FINALIZAR COMPRA</Text>
                 </TouchableOpacity>
             </View>

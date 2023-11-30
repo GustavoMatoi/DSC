@@ -79,9 +79,7 @@ export default ({nomeProduto, nomeVendedor, uriImagem, descricao, tags, preco, o
                         <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={onPressMensagens}>
                             <AntDesign name="message1" size={35} color="#B8BFFF" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[style.botao, Estilo.corPrimariaBackground]} onPress={onPressInformacoes}>
-                            <AntDesign name="info" size={35} color="#B8BFFF" />
-                        </TouchableOpacity>
+
                     </View>
                 </View>
         </View>
